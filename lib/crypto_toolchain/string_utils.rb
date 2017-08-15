@@ -1,6 +1,18 @@
 # encoding: ASCII-8BIT
 
 class String
+  # Not cryptographically secure
+  def self.random_bytes(n)
+    n.times.with_object("") do |_, memo|
+      memo << random_byte
+    end
+  end
+
+  # Not cryptographically secure
+  def self.random_byte
+    (0..255).to_a.sample.chr
+  end
+
   def from_hex
     raise StandardError.new("Not hex") unless hex?
     [self].pack("H*")
@@ -50,7 +62,7 @@ class String
   end
 
   def in_blocks(num)
-    bytes.map(&:chr).each_slice(num).map(&:join)
+    bytes.map(&:chr).each_slice(num).map(&:join) || [""]
   end
 
   # for netcat.us
@@ -166,6 +178,27 @@ class String
       memo << (unciphered ^ chain_block)
     end.without_pkcs7_padding(blocksize)
   end
+
+  def encrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128')
+    _blocks = pad_pkcs7(blocksize).in_blocks(blocksize)
+    _blocks.each_with_object("").with_index do |(block, memo), i|
+      chain_block = i == 0 ? iv : memo[(blocksize * -1)..-1]
+      intermediate = block ^ chain_block
+      enc = OpenSSL::Cipher.new("#{cipher}-ECB")
+      enc.encrypt
+      enc.key = key
+      enc.padding = 0
+      crypted = enc.update(intermediate) + enc.final
+      memo << crypted
+    end
+  end
+
+  def contains_duplicate_blocks?(blocksize)
+    _blocks = in_blocks(blocksize)
+    _blocks.length > _blocks.uniq.length
+  end
+  alias_method :is_ecb_encrypted?, :contains_duplicate_blocks?
+
   protected
 
   def is_block_pkcs7_padded?(blocksize)

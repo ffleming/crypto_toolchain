@@ -68,10 +68,3 @@ guard :rspec, cmd: "bundle exec rspec" do
     Dir[File.join("**/#{m[1]}.feature")][0] || "spec/acceptance"
   end
 end
-
-# Add files and commands to this file, like the example:
-#   watch(%r{file/path}) { `command(s)` }
-#
-guard :shell do
-  watch(/(.*).txt/) {|m| `tail #{m[0]}` }
-end

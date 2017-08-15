@@ -1,10 +1,7 @@
 #!/usr/bin/env ruby
-#encoding: ASCII-8BIT
 
-require_relative './string_utils'
-require_relative './cryptopals'
-require 'pry-byebug'
+require "bundler/setup"
+require "crypto_toolchain"
 
-nil
-binding.pry
-nil
+require "pry"
+Pry.start
