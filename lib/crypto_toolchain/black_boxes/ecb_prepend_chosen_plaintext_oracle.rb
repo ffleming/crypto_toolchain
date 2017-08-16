@@ -12,11 +12,7 @@ module CryptoToolchain
       private
 
       def obfuscate(str)
-        "#{str}#{mystery_text}"
-      end
-
-      def mystery_text
-        @msytery_text ||= MYSTERY_TEXT.from_base64
+        "#{str}#{MYSTERY_TEXT.from_base64}"
       end
     end
   end
