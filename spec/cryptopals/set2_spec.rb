@@ -62,5 +62,12 @@ RSpec.describe CryptoToolchain do
     breaker = CryptoToolchain::Tools::EcbPrependChosenPlaintextAttack.new(oracle.encrypt(plaintext), oracle: oracle)
     expect(breaker.execute).to eq File.read("spec/fixtures/2-12.txt")
   end
+
+  it "should perform an ECB cut-and-paste attack" do
+    oracle = CryptoToolchain::BlackBoxes::EcbCookieEncryptor.new
+    attack = CryptoToolchain::Tools::EcbCutAndPasteAttack.new(oracle: oracle)
+    profile = oracle.decrypt(attack.execute)
+    expect(profile.fetch(:role)).to eq "admin"
+  end
 end
 

@@ -2,13 +2,13 @@
 module CryptoToolchain
   module Tools
     class EcbPrependChosenPlaintextAttack
+      include DetermineBlocksize
       # oracle must return an encrypted string via #encrypt
       PAD = "A".freeze
-      attr_reader :blocksize, :ciphertext
+      attr_reader :ciphertext
       def initialize(ciphertext, oracle: )
         @ciphertext = ciphertext
         @oracle = oracle
-        @blocksize = determine_blocksize
         unless oracle.encrypt(PAD * blocksize * 2).is_ecb_encrypted?(@blocksize)
           raise ArgumentError.new("Ciphertext does not appear to be encrypted with ECB")
         end
@@ -37,19 +37,6 @@ module CryptoToolchain
       private
 
       attr_reader :oracle
-
-      def determine_blocksize
-        original_size = oracle.encrypt("A").length
-        i = 2
-        loop do
-          plain = "A" * i
-          len = oracle.encrypt(plain).length
-          if len != original_size
-            return len - original_size
-          end
-          i += 1
-        end
-      end
     end
   end
 end
