@@ -20,7 +20,7 @@ module CryptoToolchain
             padding_length = blocksize - (solved_in_block.bytes.length) - 1
             padding = PAD * padding_length
             target = oracle.encrypt(padding).in_blocks(blocksize)[block_index]
-            dict = (1..255).map(&:chr).each_with_object({}) do |chr, memo|
+            dict = (0..255).map(&:chr).each_with_object({}) do |chr, memo|
               guess = padding + solved + solved_in_block + chr
               output = oracle.encrypt(guess).in_blocks(blocksize)[block_index]
               memo[output] = chr
