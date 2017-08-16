@@ -6,7 +6,7 @@ module CryptoToolchain
       # oracle must return an encrypted string via #encrypt
       PAD = "A".freeze
       attr_reader :ciphertext
-      def initialize(ciphertext, oracle: )
+      def initialize(ciphertext, oracle: CryptoToolchain::BlackBoxes::EcbPrependChosenPlaintextOracle.new)
         @ciphertext = ciphertext
         @oracle = oracle
         unless oracle.encrypt(PAD * blocksize * 2).is_ecb_encrypted?(@blocksize)
