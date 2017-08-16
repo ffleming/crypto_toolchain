@@ -8,7 +8,7 @@ guard :rspec, cmd: "bundle exec rspec" do
   watch(rspec.spec_support) { rspec.spec_dir }
   watch(rspec.spec_files)
 
-  watch(%r{^lib/(.+)\.rb$})     { |m| ret =  "spec/lib/#{m[1]}_spec.rb" ; puts ret ; puts '!!!' ; ret}
+  watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
 
   ruby = dsl.ruby
   dsl.watch_spec_files_for(ruby.lib_files)
