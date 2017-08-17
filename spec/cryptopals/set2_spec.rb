@@ -74,5 +74,12 @@ RSpec.describe CryptoToolchain do
     breaker = CryptoToolchain::Tools::EcbInterpolateChosenPlaintextAttack.new(oracle: oracle)
     expect(breaker.execute).to eq File.read("spec/fixtures/2-12.txt")
   end
+
+  it "should strip pkcs7 padding, raising on failure (15)" do
+    aggregate_failures do
+      expect(("Good dog" + "\x08" * 8).without_pkcs7_padding(16)).to eq "Good dog"
+      expect { "Good dog".without_pkcs7_padding(16) }.to raise_exception(ArgumentError)
+    end
+  end
 end
 
