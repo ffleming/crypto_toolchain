@@ -14,6 +14,7 @@ require "crypto_toolchain/black_boxes/ecb_or_cbc_encryptor"
 require "crypto_toolchain/black_boxes/ecb_prepend_chosen_plaintext_oracle"
 require "crypto_toolchain/black_boxes/ecb_interpolate_chosen_plaintext_oracle"
 require "crypto_toolchain/black_boxes/ecb_cookie_encryptor"
+require "crypto_toolchain/black_boxes/cbc_bitflip_target"
 
 module CryptoToolchain
 end
