@@ -78,7 +78,7 @@ RSpec.describe CryptoToolchain do
   it "should strip pkcs7 padding, raising on failure (15)" do
     aggregate_failures do
       expect(("Good dog" + "\x08" * 8).without_pkcs7_padding(16)).to eq "Good dog"
-      expect { "Good dog".without_pkcs7_padding(16) }.to raise_exception(ArgumentError)
+      expect { "Good dog".without_pkcs7_padding(16, raise_error: true) }.to raise_exception(ArgumentError)
     end
   end
 end

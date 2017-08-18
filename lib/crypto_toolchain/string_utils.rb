@@ -137,8 +137,11 @@ class String
     # end
   end
 
-  def without_pkcs7_padding(blocksize)
-    raise ArgumentError.new("Not PKCS7 padded") unless is_pkcs7_padded?(blocksize)
+  def without_pkcs7_padding(blocksize, raise_error: false)
+    if !is_pkcs7_padded?(blocksize)
+      raise ArgumentError.new("Not PKCS7 padded") unless is_pkcs7_padded?(blocksize) if raise_error
+      return self
+    end
     self[0..(bytesize - (1 + bytes.last))]
   end
 
@@ -150,7 +153,7 @@ class String
       dec.padding = 0
       plain = dec.update(block) + dec.final
       memo << plain
-    end
+    end.without_pkcs7_padding(blocksize)
   end
 
   def encrypt_ecb(key: , blocksize: , cipher: 'AES-128')
