@@ -81,5 +81,11 @@ RSpec.describe CryptoToolchain do
       expect { "Good dog".without_pkcs7_padding(16, raise_error: true) }.to raise_exception(ArgumentError)
     end
   end
+
+  it "should perform a CBC bitflipping attack (16)" do
+    target = CryptoToolchain::BlackBoxes::CbcBitflipTarget.new
+    mal = CryptoToolchain::Tools::CbcBitflipAttack.new(target: target).execute
+    expect(target.is_admin?(mal)).to be true
+  end
 end
 

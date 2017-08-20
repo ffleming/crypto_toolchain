@@ -17,21 +17,6 @@ module CryptoToolchain
         dec.include?(";admin=true;")
       end
 
-      def flip(block, byte, bit)
-        new_byte = ((1 << (bit - 8)) ^ (block[byte].ord)).chr
-        block[0...byte] + new_byte + block[(byte+1)..-1]
-      end
-
-      def self_own
-        easy = ":admin<true:" #only need to flip the last bit of bits 1, 7, 12
-        blocks = encrypt(easy).in_blocks(16)
-        first = flip(blocks[1], 0, 8)
-        equals = flip(first, 6, 8)
-        last = flip(equals, 11, 8)
-        blocks[1] = last
-        is_admin?(blocks.join)
-      end
-
       private
 
       attr_reader :key, :iv
