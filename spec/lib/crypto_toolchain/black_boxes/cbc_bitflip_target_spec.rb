@@ -20,10 +20,4 @@ RSpec.describe CryptoToolchain::BlackBoxes::CbcBitflipTarget do
       expect(target.is_admin?(inp)).to eq false
     end
   end
-
-  describe "#self_own" do
-    it "should hack itself" do
-      expect(target.self_own).to be true
-    end
-  end
 end
