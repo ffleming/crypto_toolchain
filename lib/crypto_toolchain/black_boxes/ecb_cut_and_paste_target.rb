@@ -9,7 +9,7 @@ end
 
 module CryptoToolchain
   module BlackBoxes
-    class EcbCookieEncryptor
+    class EcbCutAndPasteTarget
       def initialize(key: String.random_bytes(16))
         @key = key
       end

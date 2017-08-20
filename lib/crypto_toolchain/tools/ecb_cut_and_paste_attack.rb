@@ -4,7 +4,7 @@ module CryptoToolchain
       include DetermineBlocksize
       def initialize(replace: "user",
                      with: "admin",
-                     oracle: CryptoToolchain::BlackBoxes::EcbCookieEncryptor.new,
+                     oracle: CryptoToolchain::BlackBoxes::EcbCutAndPasteTarget.new,
                      initial: "charlesisagood@dog.com"
                     )
         @oracle = oracle

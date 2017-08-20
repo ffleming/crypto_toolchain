@@ -63,7 +63,7 @@ RSpec.describe CryptoToolchain do
   end
 
   it "should perform an ECB cut-and-paste attack (13)" do
-    oracle = CryptoToolchain::BlackBoxes::EcbCookieEncryptor.new
+    oracle = CryptoToolchain::BlackBoxes::EcbCutAndPasteTarget.new
     attack = CryptoToolchain::Tools::EcbCutAndPasteAttack.new(oracle: oracle)
     profile = oracle.decrypt(attack.execute)
     expect(profile.fetch(:role)).to eq "admin"
