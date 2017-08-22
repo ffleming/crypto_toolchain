@@ -169,9 +169,9 @@ class String
     end
   end
 
-  def decrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128')
+  def decrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128', strip_padding: true)
     _blocks = in_blocks(blocksize)
-    _blocks.each_with_object("").with_index do |(block, memo), i|
+    decrypted = _blocks.each_with_object("").with_index do |(block, memo), i|
       dec = OpenSSL::Cipher.new("#{cipher}-ECB")
       dec.decrypt
       dec.key = key
@@ -179,7 +179,12 @@ class String
       unciphered = dec.update(block) + dec.final
       chain_block = i == 0 ? iv : _blocks[i - 1]
       memo << (unciphered ^ chain_block)
-    end.without_pkcs7_padding(blocksize)
+    end
+    if strip_padding
+      decrypted.without_pkcs7_padding(blocksize)
+    else
+      decrypted
+    end
   end
 
   def encrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128')
