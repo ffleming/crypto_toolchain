@@ -18,6 +18,7 @@ require "crypto_toolchain/black_boxes/ecb_interpolate_chosen_plaintext_oracle"
 require "crypto_toolchain/black_boxes/ecb_cut_and_paste_target"
 require "crypto_toolchain/black_boxes/cbc_bitflip_target"
 require "crypto_toolchain/black_boxes/cbc_padding_oracle"
+require "crypto_toolchain/black_boxes/netcat_cbc_padding_oracle"
 
 module CryptoToolchain
 end

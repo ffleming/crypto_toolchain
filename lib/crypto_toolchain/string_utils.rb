@@ -65,22 +65,6 @@ class String
     bytes.map(&:chr).each_slice(num).map(&:join) || [""]
   end
 
-  # for netcat.us
-  def valid_padding?
-    handle = IO.popen(["nc", "bufferoverflow.disappointedmama.com", '6767'], "r+")
-    handle.puts(Base64.strict_encode64(self))
-    resp = handle.readpartial(1024).strip
-    handle.close
-    case resp
-    when "Failed to decrypt the message"
-      false
-    when "Successfully received and decrypted the message"
-      true
-    else
-      raise StandardError.new, "Unknown response `#{res}`"
-    end
-  end
-
   def repeat_to(len)
     ljust(len, self)
   end
