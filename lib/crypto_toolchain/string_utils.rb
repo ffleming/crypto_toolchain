@@ -67,8 +67,9 @@ class String
   def gram_score
     _score = 0
     (TRIGRAM + DIGRAM).each do |gram|
-      _score += scan(/#{gram}/).length
+      _score += scan(/(#{gram})/i).size
     end
+    _score
   end
 
   def in_blocks(num)

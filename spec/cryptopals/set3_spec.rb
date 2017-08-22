@@ -16,5 +16,27 @@ RSpec.describe CryptoToolchain do
       expect(plaintext.encrypt_ctr(nonce: 0, key: "YELLOW SUBMARINE", blocksize: 16)).to eq ciphertext
     end
   end
+
+  it "Should break fixed-nonce CTR (20)" do
+    plains = File.read("spec/fixtures/3-20.txt").split("\n").map(&:strip).map(&:from_base64)
+    ctr_key = Random.new.bytes(16)
+    nonce = Random.new.bytes(16).unpack("Q<").first
+    ciphertexts = plains.map do |pl|
+      pl.encrypt_ctr(
+        key: ctr_key,
+        nonce: nonce,
+        blocksize: 16
+      )
+    end
+    shortest_ct_len = ciphertexts.map(&:bytesize).min
+    ciphertext = ciphertexts.map {|ct| ct[0...shortest_ct_len]}.join
+
+    key = ciphertext.potential_repeating_xor_keys(potential_keysizes: [shortest_ct_len]).first
+
+    recovered = ciphertext ^ key.repeat_to(ciphertext.bytes.size)
+    actual = plains.map {|p| p[0...shortest_ct_len]}.join
+    distance = recovered.hamming_distance(actual)
+    expect(distance).to be < 200
+  end
 end
 
