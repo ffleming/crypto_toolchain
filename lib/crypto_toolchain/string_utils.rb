@@ -61,6 +61,16 @@ class String
     scan(/[etaoin shrdlu]/i).size
   end
 
+  TRIGRAM = %w(the ing and her ere ent tha nth was eth for dth).freeze
+  DIGRAM = %w(th he in er an re ed  on es st en at to nt
+              ha nd ou ea ng as or ti is et ar te se hi of).freeze
+  def gram_score
+    _score = 0
+    (TRIGRAM + DIGRAM).each do |gram|
+      _score += scan(/#{gram}/).length
+    end
+  end
+
   def in_blocks(num)
     bytes.map(&:chr).each_slice(num).map(&:join) || [""]
   end
