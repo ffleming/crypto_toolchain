@@ -185,6 +185,19 @@ class String
     end
   end
 
+  def encrypt_ctr(key: , nonce: , blocksize: , cipher: 'AES-128')
+    in_blocks(blocksize).map.with_index do |block, ctr|
+      ctr_params = [nonce, ctr].pack("Q<Q<")
+      enc = OpenSSL::Cipher.new("#{cipher}-ECB")
+      enc.encrypt
+      enc.key = key
+      enc.padding = 0
+      keystream = enc.update(ctr_params) + enc.final
+      block ^ keystream[0...(block.size)]
+    end.join
+  end
+  alias_method :decrypt_ctr, :encrypt_ctr
+
   def contains_duplicate_blocks?(blocksize)
     _blocks = in_blocks(blocksize)
     _blocks.length > _blocks.uniq.length
