@@ -53,5 +53,16 @@ RSpec.describe "Cryptopals Set 3" do
     recovered = CryptoToolchain::Tools::MT19937SeedRecoverer.new(val).execute
     expect(recovered).to eq seed
   end
+
+  it "Should clone an instance of MT-19337 given 624 outputs" do
+    klass = CryptoToolchain::BlackBoxes::MT19937
+    mt = klass.new(rand(0..0xffffffff))
+    state = (0...624).map { |i| mt.untemper(mt.extract) }
+    cloned = klass.from_array(state)
+    expect(cloned == mt).to be true
+    100.times do
+      expect(cloned.extract).to eq mt.extract
+    end
+  end
 end
 

@@ -1,5 +1,12 @@
 # encoding: ASCII-8BIT
 
+class Integer
+  def to_bits
+    ret = (self & 0xFFFFFFFF).to_s(2).rjust(32, "0")
+    ret[0..3] + " " + ret[4..10] + " " + ret[11..17] + " " + ret[18..24] + " " + ret[25..31]
+  end
+end
+
 class String
   # Not cryptographically secure
   def self.random_bytes(n)
