@@ -108,15 +108,7 @@ module CryptoToolchain
       end
 
       def lowest_bits(num)
-        unpack(pack(num))
-      end
-
-      def unpack(str)
-        str.unpack(pack_arg).first
-      end
-
-      def pack(int)
-        [int].pack(pack_arg)
+        num & 0xffffffff
       end
     end
   end
