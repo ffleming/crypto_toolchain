@@ -45,5 +45,13 @@ RSpec.describe CryptoToolchain do
       expect(mt32.extract).to eq line.strip.to_i
     end
   end
+
+  it "Should find the of MT-19937 given the first output" do
+    seed = Time.now.to_i - rand(40..1000)
+    mt = CryptoToolchain::BlackBoxes::MT19937.new(seed)
+    val = mt.extract
+    recovered = CryptoToolchain::Tools::MT19937SeedRecoverer.new(val).execute
+    expect(recovered).to eq seed
+  end
 end
 
