@@ -38,5 +38,12 @@ RSpec.describe CryptoToolchain do
     distance = recovered.hamming_distance(actual)
     expect(distance).to be < 200
   end
+
+  it "Should implement MT-19937 (21)" do
+    mt32 = CryptoToolchain::BlackBoxes::MT19937.new(1131464071)
+    File.foreach("spec/fixtures/mt32.txt") do |line|
+      expect(mt32.extract).to eq line.strip.to_i
+    end
+  end
 end
 
