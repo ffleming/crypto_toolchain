@@ -14,7 +14,7 @@ module CryptoToolchain
           f: 1812433253
         }.freeze
       PARAMETERS_64 = {
-        w: 64, n: 312, m: 156, r: 31,
+        w: 64, n: 312, m: 156, r: 31, # r=31 seems wrong but wikipedia ¯\_(ツ)_/¯
         a: 0xB5026F5AA96619E9,
         u: 29, d: 0x5555555555555555,
         s: 17, b: 0x71D67FFFEDA60000,
