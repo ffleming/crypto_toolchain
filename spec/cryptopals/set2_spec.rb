@@ -1,7 +1,7 @@
 # encoding: ASCII-8BIT
 require "spec_helper"
 
-RSpec.describe CryptoToolchain do
+RSpec.describe "Cryptopals Set 2" do
   it "should perform PCKS#7 padding correctly (9)" do
     key = "YELLOW SUBMARINE"
     expect(key.pad_pkcs7(20)).to eq "YELLOW SUBMARINE\x04\x04\x04\x04"

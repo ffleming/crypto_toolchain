@@ -1,7 +1,7 @@
 # encoding: ASCII-8BIT
 require "spec_helper"
 
-RSpec.describe CryptoToolchain do
+RSpec.describe "Cryptopals Set 3" do
   it "Should crack CBC when a padding oracle is available (17)" do
     oracle = CryptoToolchain::BlackBoxes::CbcPaddingOracle.new
     atk = CryptoToolchain::Tools::CbcPaddingOracleAttack.new(oracle: oracle)
@@ -46,7 +46,7 @@ RSpec.describe CryptoToolchain do
     end
   end
 
-  it "Should find the of MT-19937 given the first output" do
+  it "Should find the of MT-19937 given the first output (22)" do
     seed = Time.now.to_i - rand(40..1000)
     mt = CryptoToolchain::BlackBoxes::MT19937.new(seed)
     val = mt.extract

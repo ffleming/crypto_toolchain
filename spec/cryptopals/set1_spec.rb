@@ -1,7 +1,7 @@
 # encoding: ASCII-8BIT
 require "spec_helper"
 
-RSpec.describe CryptoToolchain do
+RSpec.describe "Cryptopals Set 1" do
   it "should convert hex to base64 (1)" do
     hex = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
     b64 = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
