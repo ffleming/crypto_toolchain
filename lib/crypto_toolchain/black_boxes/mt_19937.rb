@@ -14,7 +14,7 @@ module CryptoToolchain
           f: 1812433253
         }.freeze
       PARAMETERS_64 = {
-        w: 64, n: 312, m: 156, r: 31, # r=31 seems wrong but wikipedia ¯\_(ツ)_/¯
+        w: 64, n: 312, m: 156, r: 31,
         a: 0xB5026F5AA96619E9,
         u: 29, d: 0x5555555555555555,
         s: 17, b: 0x71D67FFFEDA60000,
@@ -33,10 +33,10 @@ module CryptoToolchain
       def extract
         twist! if index >= n
         y = state[index]
-        y = y ^ ((y >> u) & d)
-        y = y ^ ((y << s)) & b
-        y = y ^ ((y << t)) & c
-        y = y ^ (y >> l)
+        y ^= (y >> u) & d
+        y ^= (y << s) & b
+        y ^= (y << t) & c
+        y ^= (y >> l)
         @index += 1
         lowest_bits(y)
       end
@@ -59,7 +59,6 @@ module CryptoToolchain
 
       def build_state!
         _state = [seed]
-        prev = seed
         for i in (1...n)
           prev = _state[i - 1]
           val = lowest_bits((f * (prev ^ (prev >> (w-2)) ) + i))
@@ -83,27 +82,16 @@ module CryptoToolchain
       end
 
       def lower_mask
-        (1 << r) - 1
+        @lower_mask ||= (1 << r) - 1
       end
 
       def upper_mask
-        lowest_bits((~lower_mask))
+        @upper_mask ||= lowest_bits(~lower_mask)
       end
 
       def set_vars!(parameters)
         parameters.each do |k, v|
           instance_variable_set("@#{k}", v)
-        end
-      end
-
-      def pack_arg
-        case w
-        when 32
-          "L"
-        when 64
-          "Q"
-        else
-          raise ArgumentError.new("Don't know what to do with w of #{w}")
         end
       end
 
