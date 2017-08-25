@@ -23,4 +23,15 @@ RSpec.describe CryptoToolchain::Tools::MT19937StreamCipherSeedRecoverer do
       expect(recovered).to eq(random + known)
     end
   end
+
+  describe "::vaid_token?" do
+    let(:token) { CryptoToolchain::BlackBoxes::MT19937StreamCipher.generate_token }
+    it "Should correctly validate real tokens" do
+      expect(recover.class.valid_token?(token)).to be true
+    end
+
+    it "Should not validate fake tokens" do
+      expect(recover.class.valid_token?(Random.new.bytes(16))).to be false
+    end
+  end
 end
