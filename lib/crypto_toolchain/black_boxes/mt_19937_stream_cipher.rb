@@ -17,7 +17,7 @@ module CryptoToolchain
 
       private
 
-      attr_reader :plaintext, :prng
+      attr_reader :plaintext, :prng, :seed
 
       def keystream
         return @keystream if defined? @keystream

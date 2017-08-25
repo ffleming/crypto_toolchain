@@ -54,7 +54,7 @@ RSpec.describe "Cryptopals Set 3" do
     expect(recovered).to eq seed
   end
 
-  it "Should clone an instance of MT-19337 given 624 outputs" do
+  it "Should clone an instance of MT-19337 given 624 outputs (23)" do
     klass = CryptoToolchain::BlackBoxes::MT19937
     mt = klass.new(rand(0..0xffffffff))
     state = (0...624).map { |i| mt.untemper(mt.extract) }
@@ -63,6 +63,16 @@ RSpec.describe "Cryptopals Set 3" do
     100.times do
       expect(cloned.extract).to eq mt.extract
     end
+  end
+
+  it "Should recover the seed from the MT19937 stream cipher given a known fragment (24)" do
+    known = "Poodles are good dogs"
+    random = Random.new.bytes(rand(0..255))
+    stream = CryptoToolchain::BlackBoxes::MT19937StreamCipher.new(random + known)
+    recover = CryptoToolchain::Tools::MT19937StreamCipherSeedRecoverer.new(ciphertext: stream.encrypt,
+                                                                          known: known)
+    seed = stream.send(:seed)
+    expect(recover.execute).to eq seed
   end
 end
 
