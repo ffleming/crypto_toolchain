@@ -36,9 +36,9 @@ NB: These will probably never be finished
 * [x] Break fixed-nonce CTR mode using substitutions
 * [x] Break fixed-nonce CTR statistically
 * [x] Implement the MT19937 Mersenne Twister RNG
-* [ ] Crack an MT19937 seed
-* [ ] Clone an MT19937 RNG from its output
-* [ ] Create the MT19937 stream cipher and break it
+* [x] Crack an MT19937 seed
+* [x] Clone an MT19937 RNG from its output
+* [x] Create the MT19937 stream cipher and break it
 
 ### Set 4: Stream crypto & randomness
 * [ ] Break "random access read/write" AES CTR
