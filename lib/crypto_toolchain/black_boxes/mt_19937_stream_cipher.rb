@@ -1,14 +1,15 @@
 module CryptoToolchain
   module BlackBoxes
     class MT19937StreamCipher
-      def initialize(plaintext, seed: rand(0..0x0000ffff))
-        @seed = seed & 0x0000ffff
+      MAX_SEED = 0x0000ffff
+      def initialize(plaintext, seed: rand(0..MAX_SEED))
+        @seed = seed & MAX_SEED
         @prng = CryptoToolchain::BlackBoxes::MT19937.new(@seed)
         @plaintext = plaintext
       end
 
       def encrypt(str = plaintext)
-        plaintext ^ keystream
+        str ^ keystream
       end
 
       def decrypt(str)

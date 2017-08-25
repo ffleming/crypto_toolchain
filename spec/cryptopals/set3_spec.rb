@@ -65,14 +65,12 @@ RSpec.describe "Cryptopals Set 3" do
     end
   end
 
-  it "Should recover the seed from the MT19937 stream cipher given a known fragment (24)" do
+  it "Should recover the seed from the MT19937 stream cipher given a known fragment (24a)" do
     known = "Poodles are good dogs"
     random = Random.new.bytes(rand(0..255))
     stream = CryptoToolchain::BlackBoxes::MT19937StreamCipher.new(random + known)
-    recover = CryptoToolchain::Tools::MT19937StreamCipherSeedRecoverer.new(ciphertext: stream.encrypt,
-                                                                          known: known)
-    seed = stream.send(:seed)
-    expect(recover.execute).to eq seed
+    recover = CryptoToolchain::Tools::MT19937StreamCipherSeedRecoverer.new(ciphertext: stream.encrypt, known: known)
+    expect(recover.execute).to eq stream.send(:seed)
   end
 end
 
