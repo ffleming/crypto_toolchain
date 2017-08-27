@@ -26,4 +26,5 @@ require "crypto_toolchain/black_boxes/mt_19937"
 require "crypto_toolchain/black_boxes/mt_19937_stream_cipher"
 
 module CryptoToolchain
+  AES_BLOCK_SIZE = 16
 end

@@ -15,7 +15,7 @@ class String
     end
   end
 
-  # Not cryptographically secure
+  # Obviously not cryptographically secure
   def self.random_byte
     (0..255).to_a.sample.chr
   end
@@ -79,8 +79,8 @@ class String
     _score
   end
 
-  def in_blocks(num)
-    bytes.map(&:chr).each_slice(num).map(&:join) || [""]
+  def in_blocks(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
+    bytes.map(&:chr).each_slice(blocksize).map(&:join) || [""]
   end
 
   def repeat_to(len)
@@ -117,13 +117,13 @@ class String
   end
 
   # unique blocks.  block size is in _bytes_
-  def unique_blocks(blocksize)
+  def unique_blocks(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
     in_blocks(blocksize).each_with_object({}) do |block, found|
       found[block] ||= true
     end.keys
   end
 
-  def pad_pkcs7(blocksize)
+  def pad_pkcs7(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
     _blocks = in_blocks(blocksize)
     pad_num = blocksize - _blocks.last.bytesize
     if pad_num == 0
@@ -133,13 +133,13 @@ class String
     end
   end
 
-  def is_pkcs7_padded?(blocksize)
+  def is_pkcs7_padded?(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
     # if self.size != blocksize
       return in_blocks(blocksize).last.is_block_pkcs7_padded?(blocksize)
     # end
   end
 
-  def without_pkcs7_padding(blocksize, raise_error: false)
+  def without_pkcs7_padding(blocksize = CryptoToolchain::AES_BLOCK_SIZE, raise_error: false)
     if !is_pkcs7_padded?(blocksize)
       raise ArgumentError.new("Not PKCS7 padded") unless is_pkcs7_padded?(blocksize) if raise_error
       return self
@@ -147,7 +147,7 @@ class String
     self[0..(bytesize - (1 + bytes.last))]
   end
 
-  def decrypt_ecb(key: , blocksize: , cipher: 'AES-128')
+  def decrypt_ecb(key: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128')
     in_blocks(blocksize).each_with_object("") do |block, memo|
       dec = OpenSSL::Cipher.new("#{cipher}-ECB")
       dec.decrypt
@@ -158,7 +158,7 @@ class String
     end.without_pkcs7_padding(blocksize)
   end
 
-  def encrypt_ecb(key: , blocksize: , cipher: 'AES-128')
+  def encrypt_ecb(key: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128')
     self.pad_pkcs7(blocksize).in_blocks(blocksize).each_with_object("").with_index do |(block, memo), i|
 
       enc = OpenSSL::Cipher.new("#{cipher}-ECB")
@@ -171,7 +171,7 @@ class String
     end
   end
 
-  def decrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128', strip_padding: true)
+  def decrypt_cbc(key: , iv: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128', strip_padding: true)
     _blocks = in_blocks(blocksize)
     decrypted = _blocks.each_with_object("").with_index do |(block, memo), i|
       dec = OpenSSL::Cipher.new("#{cipher}-ECB")
@@ -189,7 +189,7 @@ class String
     end
   end
 
-  def encrypt_cbc(key: , iv: , blocksize: , cipher: 'AES-128')
+  def encrypt_cbc(key: , iv: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128')
     _blocks = pad_pkcs7(blocksize).in_blocks(blocksize)
     _blocks.each_with_object("").with_index do |(block, memo), i|
       chain_block = i == 0 ? iv : memo[(blocksize * -1)..-1]
@@ -203,8 +203,8 @@ class String
     end
   end
 
-  def encrypt_ctr(key: , nonce: , blocksize: , cipher: 'AES-128')
-    in_blocks(blocksize).map.with_index do |block, ctr|
+  def encrypt_ctr(key: , nonce: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128', start_counter: 0)
+    in_blocks(blocksize).map.with_index(start_counter) do |block, ctr|
       ctr_params = [nonce, ctr].pack("Q<Q<")
       enc = OpenSSL::Cipher.new("#{cipher}-ECB")
       enc.encrypt
@@ -216,7 +216,7 @@ class String
   end
   alias_method :decrypt_ctr, :encrypt_ctr
 
-  def contains_duplicate_blocks?(blocksize)
+  def contains_duplicate_blocks?(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
     _blocks = in_blocks(blocksize)
     _blocks.length > _blocks.uniq.length
   end
@@ -224,7 +224,7 @@ class String
 
   protected
 
-  def is_block_pkcs7_padded?(blocksize)
+  def is_block_pkcs7_padded?(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
     return true if self == blocksize.chr * blocksize
     (1...blocksize).each do |padding|
       return true if self[(blocksize - padding)..-1] == padding.chr * padding
