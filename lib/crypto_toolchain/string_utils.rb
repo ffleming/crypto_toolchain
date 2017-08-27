@@ -203,16 +203,17 @@ class String
     end
   end
 
-  def encrypt_ctr(key: , nonce: , blocksize: CryptoToolchain::AES_BLOCK_SIZE, cipher: 'AES-128', start_counter: 0)
-    in_blocks(blocksize).map.with_index(start_counter) do |block, ctr|
+  def encrypt_ctr(key: , nonce: , cipher: 'AES-128', start_counter: 0)
+    each_byte.with_index(start_counter).with_object("") do |(byte, i), memo|
+      ctr = i / 16
       ctr_params = [nonce, ctr].pack("Q<Q<")
       enc = OpenSSL::Cipher.new("#{cipher}-ECB")
       enc.encrypt
       enc.key = key
       enc.padding = 0
       keystream = enc.update(ctr_params) + enc.final
-      block ^ keystream[0...(block.size)]
-    end.join
+      memo << (byte.chr ^ keystream[i % 16])
+    end
   end
   alias_method :decrypt_ctr, :encrypt_ctr
 

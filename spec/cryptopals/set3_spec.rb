@@ -12,8 +12,8 @@ RSpec.describe "Cryptopals Set 3" do
     ciphertext = "L77na/nrFsKvynd6HzOoG7GHTLXsTVu9qvY/2syLXzhPweyyMTJULu/6/kXX0KSvoOLSFQ==".from_base64
     plaintext = "Yo, VIP Let's kick it Ice, Ice, baby Ice, Ice, baby "
     aggregate_failures do
-      expect(ciphertext.decrypt_ctr(nonce: 0, key: "YELLOW SUBMARINE", blocksize: 16)).to eq plaintext
-      expect(plaintext.encrypt_ctr(nonce: 0, key: "YELLOW SUBMARINE", blocksize: 16)).to eq ciphertext
+      expect(ciphertext.decrypt_ctr(nonce: 0, key: "YELLOW SUBMARINE")).to eq plaintext
+      expect(plaintext.encrypt_ctr(nonce: 0, key: "YELLOW SUBMARINE")).to eq ciphertext
     end
   end
 
@@ -24,8 +24,7 @@ RSpec.describe "Cryptopals Set 3" do
     ciphertexts = plains.map do |pl|
       pl.encrypt_ctr(
         key: ctr_key,
-        nonce: nonce,
-        blocksize: 16
+        nonce: nonce
       )
     end
     shortest_ct_len = ciphertexts.map(&:bytesize).min
