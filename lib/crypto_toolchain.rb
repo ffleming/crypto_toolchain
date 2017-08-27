@@ -5,6 +5,7 @@ require "uri"
 require 'json'
 require "crypto_toolchain/version"
 require "crypto_toolchain/extensions"
+require "crypto_toolchain/utilities"
 require "crypto_toolchain/tools"
 require "crypto_toolchain/black_boxes"
 

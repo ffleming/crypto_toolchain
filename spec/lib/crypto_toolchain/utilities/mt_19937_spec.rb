@@ -1,9 +1,9 @@
 # encoding: ASCII-8BIT
 require "spec_helper"
-RSpec.describe CryptoToolchain::BlackBoxes::MT19937 do
+RSpec.describe CryptoToolchain::Utilities::MT19937 do
   context "32 bit" do
     # Values from https://gist.github.com/mimoo/8e5d80a2e236b8b6f5ed
-    let(:mt32) { CryptoToolchain::BlackBoxes::MT19937.new(1131464071) }
+    let(:mt32) { CryptoToolchain::Utilities::MT19937.new(1131464071) }
     describe "#extract" do
       it "Should generate the correct values (21)" do
         File.foreach("spec/fixtures/mt32.txt") do |line|

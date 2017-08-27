@@ -9,7 +9,7 @@ module CryptoToolchain
 
       def execute
         (start..finish).each do |seed|
-          if CryptoToolchain::BlackBoxes::MT19937.new(seed).extract == extracted
+          if CryptoToolchain::Utilities::MT19937.new(seed).extract == extracted
             return seed
           end
         end

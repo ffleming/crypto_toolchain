@@ -8,7 +8,7 @@ module CryptoToolchain
 
       def initialize(plaintext, seed: rand(0..MAX_SEED))
         @seed = seed & MAX_SEED
-        @prng = CryptoToolchain::BlackBoxes::MT19937.new(@seed)
+        @prng = CryptoToolchain::Utilities::MT19937.new(@seed)
         @plaintext = plaintext
       end
 

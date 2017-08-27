@@ -39,7 +39,7 @@ RSpec.describe "Cryptopals Set 3" do
   end
 
   it "Should implement MT-19937 (21)" do
-    mt32 = CryptoToolchain::BlackBoxes::MT19937.new(1131464071)
+    mt32 = CryptoToolchain::Utilities::MT19937.new(1131464071)
     File.foreach("spec/fixtures/mt32.txt") do |line|
       expect(mt32.extract).to eq line.strip.to_i
     end
@@ -47,14 +47,14 @@ RSpec.describe "Cryptopals Set 3" do
 
   it "Should find the seed of MT-19937 given the first output (22)" do
     seed = Time.now.to_i - rand(40..1000)
-    mt = CryptoToolchain::BlackBoxes::MT19937.new(seed)
+    mt = CryptoToolchain::Utilities::MT19937.new(seed)
     val = mt.extract
     recovered = CryptoToolchain::Tools::MT19937SeedRecoverer.new(val).execute
     expect(recovered).to eq seed
   end
 
   it "Should clone an instance of MT-19337 given 624 outputs (23)" do
-    klass = CryptoToolchain::BlackBoxes::MT19937
+    klass = CryptoToolchain::Utilities::MT19937
     mt = klass.new(rand(0..0xffffffff))
     state = (0...624).map { |i| mt.untemper(mt.extract) }
     cloned = klass.from_array(state)

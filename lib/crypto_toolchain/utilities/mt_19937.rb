@@ -2,7 +2,7 @@
 
 # Note: 64 bit is untested
 module CryptoToolchain
-  module BlackBoxes
+  module Utilities
     class MT19937
       PARAMETERS_32 = {
           w: 32, n: 624, m: 397, r: 31,
