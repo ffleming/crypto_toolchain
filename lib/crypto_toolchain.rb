@@ -24,6 +24,7 @@ require "crypto_toolchain/black_boxes/cbc_padding_oracle"
 require "crypto_toolchain/black_boxes/netcat_cbc_padding_oracle"
 require "crypto_toolchain/black_boxes/mt_19937"
 require "crypto_toolchain/black_boxes/mt_19937_stream_cipher"
+require "crypto_toolchain/black_boxes/aes_ctr_editor"
 
 module CryptoToolchain
   AES_BLOCK_SIZE = 16
