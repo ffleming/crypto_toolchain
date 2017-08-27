@@ -1,7 +1,7 @@
 module CryptoToolchain
   module BlackBoxes
     class AesCtrEditor
-      def initialize(plaintext, key: Random.new.bytes(16), nonce: Random.new.bytes(16))
+      def initialize(plaintext, key: Random.new.bytes(16), nonce: rand(0..0x0000FF))
         @plaintext = plaintext
         @key = key
         @nonce = nonce
