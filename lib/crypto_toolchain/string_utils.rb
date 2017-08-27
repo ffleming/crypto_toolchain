@@ -2,8 +2,9 @@
 
 class Integer
   def to_bits
-    ret = (self & 0xFFFFFFFF).to_s(2).rjust(32, "0")
-    ret[0..3] + " " + ret[4..10] + " " + ret[11..17] + " " + ret[18..24] + " " + ret[25..31]
+    (self & 0xFFFFFFFF).
+      to_s(2).
+      rjust(32, "0")
   end
 end
 
