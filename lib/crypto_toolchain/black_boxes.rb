@@ -1,4 +1,3 @@
-require "crypto_toolchain/black_boxes/aes_ctr_editor"
 require "crypto_toolchain/black_boxes/ecb_or_cbc_encryptor"
 require "crypto_toolchain/black_boxes/ecb_prepend_chosen_plaintext_oracle"
 require "crypto_toolchain/black_boxes/ecb_interpolate_chosen_plaintext_oracle"
@@ -10,9 +9,9 @@ require "crypto_toolchain/black_boxes/mt_19937"
 require "crypto_toolchain/black_boxes/mt_19937_stream_cipher"
 require "crypto_toolchain/black_boxes/aes_ctr_editor"
 require "crypto_toolchain/black_boxes/ctr_bitflip_target"
+require "crypto_toolchain/black_boxes/cbc_iv_equals_key_target"
 
 module CryptoToolchain
   module BlackBoxes
-
   end
 end

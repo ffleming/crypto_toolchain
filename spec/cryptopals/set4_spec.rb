@@ -14,4 +14,10 @@ RSpec.describe "Cryptopals Set 4" do
     mal = CryptoToolchain::Tools::CtrBitflipAttack.new(target: target).execute
     expect(target.is_admin?(mal)).to be true
   end
+
+  it "it should reveal the key when key=iv in CBC mode provided an error message information leak (27)" do
+    target = CryptoToolchain::BlackBoxes::CbcIvEqualsKeyTarget.new
+    key = CryptoToolchain::Tools::CbcIvEqualsKeyAttack.new(target: target).execute
+    expect(key).to eq target.send(:key)
+  end
 end

@@ -9,6 +9,7 @@ require "crypto_toolchain/tools/mt_19937_seed_recoverer"
 require "crypto_toolchain/tools/mt_19937_stream_cipher_seed_recoverer"
 require "crypto_toolchain/tools/aes_ctr_recoverer"
 require "crypto_toolchain/tools/ctr_bitflip_attack"
+require "crypto_toolchain/tools/cbc_iv_equals_key_attack"
 
 module CryptoToolchain
   module Tools
