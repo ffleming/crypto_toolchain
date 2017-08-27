@@ -4,7 +4,7 @@ require "pp"
 require "uri"
 require 'json'
 require "crypto_toolchain/version"
-require "crypto_toolchain/string_utils"
+require "crypto_toolchain/extensions"
 require "crypto_toolchain/tools"
 require "crypto_toolchain/black_boxes"
 
