@@ -203,6 +203,23 @@ class String
     end
   end
 
+  # Bitstring is indexed as a normal string, ie:
+  #
+  # 'd' = 0x64 = 01100100
+  #              01234567
+  # 'd'.bitflip(7) => 'e'
+  def bitflip(bit_index, byte_index: 0)
+    byte_offset, bit_offset = bit_index.divmod(8)
+    byte_offset += byte_index
+    target = self.clone
+    target[byte_offset] = (target[byte_offset].ord ^  (1 << (7-bit_offset))).chr
+    target
+  end
+  alias_method :bit_flip, :bitflip
+  alias_method :flipbit, :bitflip
+  alias_method :flip_bit, :bitflip
+  alias_method :flip, :bitflip
+
   def encrypt_ctr(key: , nonce: , cipher: 'AES-128', start_counter: 0)
     each_byte.with_index(start_counter).with_object("") do |(byte, i), memo|
       ctr = i / 16
