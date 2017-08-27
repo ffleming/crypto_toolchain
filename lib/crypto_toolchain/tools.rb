@@ -8,6 +8,7 @@ require "crypto_toolchain/tools/interactive_xor"
 require "crypto_toolchain/tools/mt_19937_seed_recoverer"
 require "crypto_toolchain/tools/mt_19937_stream_cipher_seed_recoverer"
 require "crypto_toolchain/tools/aes_ctr_recoverer"
+require "crypto_toolchain/tools/ctr_bitflip_attack"
 
 module CryptoToolchain
   module Tools

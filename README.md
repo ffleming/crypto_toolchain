@@ -42,7 +42,7 @@ NB: These will probably never be finished
 
 ### Set 4: Stream crypto & randomness
 * [x] Break "random access read/write" AES CTR
-* [ ] CTR bitflipping
+* [x] CTR bitflipping
 * [ ] Recover the key from CBC with IV=Key
 * [ ] Implement a SHA-1 keyed MAC
 * [ ] Break a SHA-1 keyed MAC using length extension

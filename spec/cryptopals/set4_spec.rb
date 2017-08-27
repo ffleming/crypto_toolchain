@@ -8,4 +8,10 @@ RSpec.describe "Cryptopals Set 4" do
     breaker = CryptoToolchain::Tools::AesCtrRecoverer.new(editor)
     expect(breaker.execute).to eq plain
   end
+
+  it "should perform a CTR bitflip attack (26)" do
+    target = CryptoToolchain::BlackBoxes::CtrBitflipTarget.new
+    mal = CryptoToolchain::Tools::CtrBitflipAttack.new(target: target).execute
+    expect(target.is_admin?(mal)).to be true
+  end
 end
