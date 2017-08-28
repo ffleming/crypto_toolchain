@@ -23,22 +23,18 @@ module CryptoToolchain
       def bindigest
         return @bindigest if defined? @bindigest
 
-        h0 = 0x67452301
-        h1 = 0xefcdaB89
-        h2 = 0x98badcfe
-        h3 = 0x10325476
-        h4 = 0xc3d2e1f0
+        h = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ]
 
         preprocessed.in_blocks(64).each do |_block|
           w = _block.unpack("L>16")
           (16..79).each do |i|
             w[i] = (w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16]).lrot(1)
           end
-          a = h0
-          b = h1
-          c = h2
-          d = h3
-          e = h4
+          a = h[0]
+          b = h[1]
+          c = h[2]
+          d = h[3]
+          e = h[4]
           (0..79).each do |i|
             func, k = f_and_k_for(i)
             f = func.call(b, c, d)
@@ -49,13 +45,13 @@ module CryptoToolchain
             b = a
             a = temp
           end
-          h0 = (h0 + a) & 0xffffffff
-          h1 = (h1 + b) & 0xffffffff
-          h2 = (h2 + c) & 0xffffffff
-          h3 = (h3 + d) & 0xffffffff
-          h4 = (h4 + e) & 0xffffffff
+          h[0] = (h[0] + a) & 0xffffffff
+          h[1] = (h[1] + b) & 0xffffffff
+          h[2] = (h[2] + c) & 0xffffffff
+          h[3] = (h[3] + d) & 0xffffffff
+          h[4] = (h[4] + e) & 0xffffffff
         end
-        @bindigest = [ h0, h1, h2, h3, h4].pack("L>5")
+        @bindigest = h.pack("L>5")
       end
 
       private
