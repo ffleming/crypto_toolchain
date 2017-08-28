@@ -70,6 +70,8 @@ module CryptoToolchain
 
       K_CONSTANTS = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ].freeze
 
+      CONSTANTS = F_FUNCTIONS.zip(K_CONSTANTS).freeze
+
       STARTING_REGISTERS = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ].freeze
 
       def constant_lookup(index)
@@ -77,18 +79,7 @@ module CryptoToolchain
       end
 
       def f_and_k_for(i)
-        case i
-        when 0..19
-          constant_lookup(0)
-        when 20..39
-          constant_lookup(1)
-        when 40..59
-          constant_lookup(2)
-        when 60..79
-          constant_lookup(3)
-        else
-          raise ArgumentError.new("#{i} out of sensible range 0..79")
-        end
+        CONSTANTS[i/20]
       end
 
       def preprocessed
