@@ -10,6 +10,12 @@ module CryptoToolchain
         def bindigest(str)
           CryptoToolchain::Utilities::SHA1.new(str).bindigest
         end
+
+        def registers_for(hex_str)
+          raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
+          raise ArgumentError.new("Argument must be 160 characters long") unless hex_str.length == 40
+          hex_str.from_hex.in_blocks(4).flat_map { |block| block.unpack("L>") }
+        end
       end
 
       def initialize(message)
