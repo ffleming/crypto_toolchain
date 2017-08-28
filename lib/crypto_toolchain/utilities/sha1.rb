@@ -16,25 +16,23 @@ module CryptoToolchain
         @original = message
       end
 
-      def hexdigest
-        @hexdigest ||= bindigest.unpack("H*").join
+      def hexdigest(registers: STARTING_REGISTERS)
+        bindigest(registers: registers).unpack("H*").join
       end
 
-      def bindigest
-        return @bindigest if defined? @bindigest
-
-        h = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ]
-
+      def bindigest(registers: STARTING_REGISTERS)
+        unless registers.is_a?(Array) && registers.length == 5
+          raise ArgumentError.new("registers must be a 5-element array")
+        end
+        h = registers.dup
         preprocessed.in_blocks(64).each do |_block|
           w = _block.unpack("L>16")
           (16..79).each do |i|
             w[i] = (w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16]).lrot(1)
           end
-          a = h[0]
-          b = h[1]
-          c = h[2]
-          d = h[3]
-          e = h[4]
+
+          a, b, c, d, e = h
+
           (0..79).each do |i|
             func, k = f_and_k_for(i)
             f = func.call(b, c, d)
@@ -45,13 +43,12 @@ module CryptoToolchain
             b = a
             a = temp
           end
-          h[0] = (h[0] + a) & 0xffffffff
-          h[1] = (h[1] + b) & 0xffffffff
-          h[2] = (h[2] + c) & 0xffffffff
-          h[3] = (h[3] + d) & 0xffffffff
-          h[4] = (h[4] + e) & 0xffffffff
+          updates = [a, b, c, d, e]
+          h.map!.with_index do |val, i|
+            (val + updates[i]) & 0xffffffff
+          end
         end
-        @bindigest = h.pack("L>5")
+        h.pack("L>5")
       end
 
       private
@@ -64,12 +61,11 @@ module CryptoToolchain
         ->(b,c,d) { (b & c) | (b & d) | (c & d) },
         ->(b,c,d) { b ^ c ^ d },
       ].freeze
-      K_CONSTANTS = [
-        0x5a827999,
-        0x6ed9eba1,
-        0x8f1bbcdc,
-        0xca62c1d6
-      ].freeze
+
+      K_CONSTANTS = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ].freeze
+
+      STARTING_REGISTERS = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ].freeze
+
       def constant_lookup(index)
         [F_FUNCTIONS[index], K_CONSTANTS[index]]
       end
