@@ -20,4 +20,10 @@ RSpec.describe "Cryptopals Set 4" do
     key = CryptoToolchain::Tools::CbcIvEqualsKeyAttack.new(target: target).execute
     expect(key).to eq target.send(:key)
   end
+
+  it "should produce a SHA1 MAC (28)" do
+    sha1 = CryptoToolchain::BlackBoxes::SHA1Mac.new(key: "woof")
+    mac = sha1.mac("Dogs are cool")
+    expect(mac).to eq CryptoToolchain::Utilities::SHA1.hexdigest("woofDogs are cool")
+  end
 end
