@@ -32,7 +32,7 @@ module CryptoToolchain
       end
 
       def preprocessed(str)
-        @preprocessed ||= padded + [str.bytesize].pack("Q>")
+        @preprocessed ||= padded + [str.bytesize * 8].pack("Q>")
       end
 
       def padded
