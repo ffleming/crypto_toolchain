@@ -31,7 +31,7 @@ module CryptoToolchain
           raise ArgumentError.new("registers must be a 5-element array")
         end
         h = registers.dup
-        preprocessed.in_blocks(64).each do |_block|
+        (original + padding).in_blocks(64).each do |_block|
           w = _block.unpack("L>16")
           (16..79).each do |i|
             w[i] = (w[i-3] ^ w[i-8] ^ w[i-14] ^ w[i-16]).lrot(1)
@@ -90,10 +90,6 @@ module CryptoToolchain
       def f_and_k_for(i)
         raise ArgumentError.new("i must be in 0..79") unless i >=0 && i <= 79
         CONSTANTS[i/20]
-      end
-
-      def preprocessed
-        @preprocessed ||= original + padding
       end
     end
   end
