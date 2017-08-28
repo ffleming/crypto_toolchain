@@ -11,6 +11,10 @@ module CryptoToolchain
           CryptoToolchain::Utilities::SHA1.new(str).bindigest(registers: registers)
         end
 
+        def padding(str)
+          CryptoToolchain::Utilities::SHA1.new(str).padding
+        end
+
         def registers_for(hex_str)
           raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
           raise ArgumentError.new("Argument must be 160 characters long") unless hex_str.length == 40
