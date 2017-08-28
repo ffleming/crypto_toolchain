@@ -11,4 +11,5 @@ require "crypto_toolchain/black_boxes"
 
 module CryptoToolchain
   AES_BLOCK_SIZE = 16
+  PRINTABLE_CHARACTERS = ((0x20..0x7e).to_a + [0x0a, 0x0d]).map(&:chr).freeze
 end
