@@ -74,11 +74,8 @@ module CryptoToolchain
 
       STARTING_REGISTERS = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ].freeze
 
-      def constant_lookup(index)
-        [F_FUNCTIONS[index], K_CONSTANTS[index]]
-      end
-
       def f_and_k_for(i)
+        raise ArgumentError.new("i must be in 0..79") unless i >=0 && i <= 79
         CONSTANTS[i/20]
       end
 
