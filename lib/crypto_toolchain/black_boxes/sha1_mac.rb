@@ -8,7 +8,12 @@ module CryptoToolchain
       end
 
       def mac(str)
-        CryptoToolchain::Utilities::SHA1.hexdigest(key + str)
+        concat = key + str
+        CryptoToolchain::Utilities::SHA1.hexdigest(concat)
+      end
+
+      def valid?(message: , mac: )
+        self.mac(message) == mac
       end
     end
   end

@@ -45,7 +45,7 @@ NB: These will probably never be finished
 * [x] CTR bitflipping
 * [x] Recover the key from CBC with IV=Key
 * [x] Implement a SHA-1 keyed MAC
-* [ ] Break a SHA-1 keyed MAC using length extension
+* [x] Break a SHA-1 keyed MAC using length extension
 * [ ] Break an MD4 keyed MAC using length extension
 * [ ] Implement and break HMAC-SHA1 with an artificial timing leak
 * [ ] Break HMAC-SHA1 with a slightly less artificial timing leak
