@@ -53,9 +53,9 @@ module CryptoToolchain
             b = a
             a = temp
           end
-          updates = [a, b, c, d, e]
-          h.map!.with_index do |val, i|
-            (val + updates[i]) & 0xffffffff
+
+          [a, b, c, d, e].each_with_index do |val, i|
+            h[i] = (h[i] + val) & 0xffffffff
           end
         end
         h.pack("L>5")
