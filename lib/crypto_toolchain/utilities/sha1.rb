@@ -10,6 +10,7 @@ module CryptoToolchain
         def bindigest(str, registers: STARTING_REGISTERS, append_length: nil)
           CryptoToolchain::Utilities::SHA1.new(str).bindigest(registers: registers, append_length: append_length)
         end
+        alias_method :digest, :bindigest
 
         def padding(str)
           num_null_pad = (56 - (str.bytesize + 1) ) % 64
@@ -70,6 +71,7 @@ module CryptoToolchain
         end
         h.pack("L>5")
       end
+      alias_method :digest, :bindigest
 
       # def padding
       #   return @padding if defined? @padding
