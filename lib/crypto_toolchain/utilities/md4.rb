@@ -26,7 +26,6 @@ module CryptoToolchain
         bindigest(state: state, append_length: append_length).unpack("H*").join
       end
 
-      # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
         running_state = registers_from(state)
 
@@ -37,26 +36,28 @@ module CryptoToolchain
         padding = (0x80.chr + (0.chr * padding_len) + str_length)
 
         (original + padding).in_blocks(64).each do |block|
-          x = block.unpack("L<16")
+          w = block.unpack("L<16")
 
           a, b, c, d = running_state
+          # Extraction of each 16-operation round into a loop over four elements originally
+          # found at https://rosettacode.org/wiki/MD4#Ruby
           [0, 4, 8, 12].each do |i|
-            a = f(a, b, c, d, x[i]).lrot(3)
-            d = f(d, a, b, c, x[i+1]).lrot(7)
-            c = f(c, d, a, b, x[i+2]).lrot(11)
-            b = f(b, c, d, a, x[i+3]).lrot(19)
+            a = f(a, b, c, d, w[i]).lrot(3)
+            d = f(d, a, b, c, w[i+1]).lrot(7)
+            c = f(c, d, a, b, w[i+2]).lrot(11)
+            b = f(b, c, d, a, w[i+3]).lrot(19)
           end
           [0, 1, 2, 3].each do |i|
-            a = g(a, b, c, d, x[i]).lrot(3)
-            d = g(d, a, b, c, x[i+4]).lrot(5)
-            c = g(c, d, a, b, x[i+8]).lrot(9)
-            b = g(b, c, d, a, x[i+12]).lrot(13)
+            a = g(a, b, c, d, w[i]).lrot(3)
+            d = g(d, a, b, c, w[i+4]).lrot(5)
+            c = g(c, d, a, b, w[i+8]).lrot(9)
+            b = g(b, c, d, a, w[i+12]).lrot(13)
           end
           [0, 2, 1, 3].each do |i|
-            a = h(a, b, c, d, x[i]).lrot(3)
-            d = h(d, a, b, c, x[i+8]).lrot(9)
-            c = h(c, d, a, b, x[i+4]).lrot(11)
-            b = h(b, c, d, a, x[i+12]).lrot(15)
+            a = h(a, b, c, d, w[i]).lrot(3)
+            d = h(d, a, b, c, w[i+8]).lrot(9)
+            c = h(c, d, a, b, w[i+4]).lrot(11)
+            b = h(b, c, d, a, w[i+12]).lrot(15)
           end
 
           [a, b, c, d].each_with_index do |val, i|
