@@ -5,21 +5,12 @@ class Integer
   end
 
   def lrot(num)
-    ensure_32_bit do
-      ((self << num) & 0xffffffff) |
-        (self >> (32 - num))
-    end
+    ((self << num) & 0xffffffff) |
+      ((self & 0xffffffff) >> (32 - num))
   end
 
   def rrot(num)
-    ensure_32_bit do
-      (self >> num) |
-        ((self << (32 - num)) & 0xffffffff)
-    end
-  end
-
-  def ensure_32_bit
-    raise ArgumentError.new("This only works for 32 bit numbers") unless bit_length <= 32
-    yield if block_given?
+    ((self & 0xffffffff) >> num) |
+      ((self << (32 - num)) & 0xffffffff)
   end
 end
