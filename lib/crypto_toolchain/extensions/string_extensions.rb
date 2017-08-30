@@ -18,9 +18,7 @@ class String
   end
 
   def to_hex
-    each_byte.with_object("") do |byte, ret|
-      ret << byte.to_s(16).rjust(2, "0")
-    end
+    unpack("H*").first
   end
 
   def hex?
