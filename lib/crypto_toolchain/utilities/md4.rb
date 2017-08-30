@@ -28,7 +28,6 @@ module CryptoToolchain
 
       # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
-        # functions
         mask = (1 << 32) - 1
         f = proc {|x, y, z| x & y | x.^(mask) & z}
         g = proc {|x, y, z| x & y | x & z | y & z}
@@ -45,10 +44,7 @@ module CryptoToolchain
         str_length = [(length * 8)].pack("Q<")
         padding = (0x80.chr + (0.chr * padding_len) + str_length)
 
-        io = StringIO.new(message + padding)
-        block = ""
-
-        while io.read(64, block)
+        (message + padding).in_blocks(64).each do |block|
           x = block.unpack("L<16")
 
           # Process this block.
