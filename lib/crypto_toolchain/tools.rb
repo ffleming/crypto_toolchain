@@ -11,6 +11,7 @@ require "crypto_toolchain/tools/aes_ctr_recoverer"
 require "crypto_toolchain/tools/ctr_bitflip_attack"
 require "crypto_toolchain/tools/cbc_iv_equals_key_attack"
 require "crypto_toolchain/tools/sha1_length_extension_attack"
+require "crypto_toolchain/tools/md4_length_extension_attack"
 
 module CryptoToolchain
   module Tools

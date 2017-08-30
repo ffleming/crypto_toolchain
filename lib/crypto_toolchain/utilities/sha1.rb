@@ -31,6 +31,7 @@ module CryptoToolchain
 
         length = original.bytesize + append_length
 
+        # while (string.size % 64) != 56
         num_null_pad = (56 - (length + 1) ) % 64
         padding = 0x80.chr + (0.chr * num_null_pad) + [length * 8].pack("Q>")
 

@@ -10,6 +10,7 @@ require "crypto_toolchain/black_boxes/aes_ctr_editor"
 require "crypto_toolchain/black_boxes/ctr_bitflip_target"
 require "crypto_toolchain/black_boxes/cbc_iv_equals_key_target"
 require "crypto_toolchain/black_boxes/sha1_mac"
+require "crypto_toolchain/black_boxes/md4_mac"
 
 module CryptoToolchain
   module BlackBoxes

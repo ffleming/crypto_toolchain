@@ -14,7 +14,7 @@ module CryptoToolchain
 
         def padding(str)
           num_null_pad = (56 - (str.bytesize + 1) ) % 64
-          0x80.chr + (0.chr * num_null_pad) + [str.bytesize * 8].pack("Q>")
+          0x80.chr + (0.chr * num_null_pad) + [(str.bytesize * 8)].pack("Q<")
         end
       end
 
@@ -26,7 +26,7 @@ module CryptoToolchain
         bindigest(state: state, append_length: append_length).unpack("H*").join
       end
 
-      # Copied from https://rosettacode.org/wiki/MD4#Ruby
+      # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
         # functions
         mask = (1 << 32) - 1
@@ -39,18 +39,13 @@ module CryptoToolchain
         a, b, c, d = registers_from(state)
 
         message = original.dup
-        bit_len = message.size << 3
-        message += "\x80"
-        while (message.size % 64) != 56
-          message += "\0"
-        end
-        message = message.force_encoding('ascii-8bit') + [bit_len & mask, bit_len >> 32].pack("L<2")
+        length = message.bytesize + append_length
 
-        if message.size % 64 != 0
-          fail "failed to pad to correct length"
-        end
+        padding_len = (56 - (length + 1) ) % 64
+        str_length = [(length * 8)].pack("Q<")
+        padding = (0x80.chr + (0.chr * padding_len) + str_length)
 
-        io = StringIO.new(message)
+        io = StringIO.new(message + padding)
         block = ""
 
         while io.read(64, block)
@@ -91,12 +86,12 @@ module CryptoToolchain
       attr_reader :original
 
       # Equivalent to [ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476 ]
-      INITIAL_STATE = "67452301efcdab8998badcfe10325476".freeze
+      INITIAL_STATE = "0123456789abcdeffedcba9876543210"
 
       def registers_from(hex_str)
         raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
         raise ArgumentError.new("Argument must be 32 characters long") unless hex_str.length == 32
-        hex_str.from_hex.unpack("L>4")
+        hex_str.from_hex.unpack("L<4")
       end
     end
   end
