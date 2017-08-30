@@ -11,6 +11,10 @@ RSpec.describe CryptoToolchain::Tools::MT19937StreamCipherSeedRecoverer do
   end
   let(:recovered_seed) { recover.execute }
 
+  before(:each) do
+    CryptoToolchain::BlackBoxes::MT19937StreamCipher.max_seed = 0x000000ff
+  end
+
   describe "#execute" do
     it "Should recover the seed" do
       expect(recovered_seed).to eq(stream.send(:seed))

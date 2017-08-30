@@ -46,6 +46,7 @@ RSpec.describe "Cryptopals Set 3" do
   end
 
   it "Should find the seed of MT-19937 given the first output (22)" do
+    CryptoToolchain::BlackBoxes::MT19937StreamCipher.max_seed = 0x000000ff
     seed = Time.now.to_i - rand(40..1000)
     mt = CryptoToolchain::Utilities::MT19937.new(seed)
     val = mt.extract

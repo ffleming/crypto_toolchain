@@ -108,7 +108,7 @@ module CryptoToolchain
         end
       end
 
-      def defunct_untemper_step_for_posterity
+      def defunct_untemper_step_for_posterity(y, debug: false)
         # We're reversing
         #     y ^= (y <<  7) & 0x9d2cf80
         # so, take the bottom 25 bits of y, shift them over, and & that with the constant 0x9d2c5680,

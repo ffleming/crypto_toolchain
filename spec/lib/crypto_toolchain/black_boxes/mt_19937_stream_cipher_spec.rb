@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe CryptoToolchain::BlackBoxes::MT19937StreamCipher do
   let(:cipher) { CryptoToolchain::BlackBoxes::MT19937StreamCipher.new(plaintext, seed: 150) }
   let(:plaintext) { "Charles is a good dog" }
-  let(:ciphertext) { "\xA7\xD2\x9Ak\x9CW\x17\xDC\xE7\x16\xB7=\xDA\xFC\x06\x87\x87\xBD\fa\xFB" }
+  let(:ciphertext) { "\xA7\x9C\xF9\x9A\xD6\f\xF8\xCE\x92\x1E*#9\xA7\xFB\xFB\x94!\xCA\x8FU" }
   describe "#encrypt" do
     it "Should encrypt appropriately" do
       expect(cipher.encrypt).to eq ciphertext

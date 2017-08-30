@@ -30,6 +30,7 @@ module CryptoToolchain
             return seed
           end
         end
+        raise RuntimeError.new, "Could not recover seed"
       end
 
       attr_reader :known, :ciphertext

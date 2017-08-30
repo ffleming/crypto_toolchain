@@ -23,6 +23,7 @@ module CryptoToolchain
               guess = padding + solved + solved_in_block + chr
               output = oracle.encrypt(guess).in_blocks(blocksize)[block_index]
               memo[output] = chr
+              break(memo) if output == target
             end
             if !dict.has_key?(target)
               return "#{solved}#{solved_in_block}"
