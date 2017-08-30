@@ -39,15 +39,6 @@ RSpec.describe "Cryptopals Set 1" do
     expect((key ^ input).to_hex).to eq expected
   end
 
-  it "should get Hamming distance correct" do
-    str1 = "this is a test"
-    str2 = "wokka wokka!!!"
-    aggregate_failures do
-      expect(str1.hamming_distance(str2)).to eq 37
-      expect(str2.hamming_distance(str1)).to eq 37
-    end
-  end
-
   it "should break repeating-key xor (6)" do
     ciphertext = Base64.decode64(File.read("spec/fixtures/1-6.txt").strip)
 
@@ -61,25 +52,6 @@ RSpec.describe "Cryptopals Set 1" do
     expect(result[:key]).to eq 'Terminator X: Bring the noise'
     lyric = "Play that funky music Come on, Come on, let me hear \nPlay that funky music white boy you say it, say it \nPlay that funky music A little louder now \nPlay that funky music, white boy Come on, Come on, Come on \nPlay that funky music"
     expect(result[:plain].include? lyric).to be true
-  end
-
-  it "should correctly determine if a block is PKCS7 padded" do
-    aggregate_failures do
-      (1..15).each do |i|
-        str = "#{'A' * (16-i)}#{i.chr * i}"
-        expect(str.is_pkcs7_padded?(16)).to be true
-      end
-    end
-  end
-
-  it "should correctly strip PKCS7 padding" do
-    aggregate_failures do
-      (1..15).each do |i|
-        expected = 'A' * (16 - i)
-        str = "#{expected}#{i.chr * i}"
-        expect(str.without_pkcs7_padding(16)).to eq expected
-      end
-    end
   end
 
   it "should decrypt with AES-128 in ECB mode (7)" do
