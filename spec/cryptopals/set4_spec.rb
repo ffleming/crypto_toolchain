@@ -45,7 +45,7 @@ RSpec.describe "Cryptopals Set 4" do
     expect(found).to be true
   end
 
-  it "should perform a MD4 length extension attack (30)" do
+  it "should perform a MD4 length extension attack (30a)" do
     message = "comment1=cooking%20MCs;userdata=foo;comment2=%20like%20a%20pound%20of%20bacon"
     add = ";admin=true"
     validator = CryptoToolchain::BlackBoxes::MD4Mac.new
@@ -63,7 +63,7 @@ RSpec.describe "Cryptopals Set 4" do
     expect(found).to be true
   end
 
-  it "should implement HMAC-SHA1 (30a)" do
+  it "should implement HMAC-SHA1 (30b)" do
     10.times do |i|
       key = Random.new.bytes(rand(1..128))
       message = Random.new.bytes(rand(1..1024))
