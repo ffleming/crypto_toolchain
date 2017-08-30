@@ -71,7 +71,7 @@ class String
   end
 
   def to_bits
-    bytes.map {|b| format("%08d", b.to_s(2)) }.join
+    self.unpack("B*").first
   end
   alias_method :bitstring, :to_bits
   alias_method :bits, :to_bits
