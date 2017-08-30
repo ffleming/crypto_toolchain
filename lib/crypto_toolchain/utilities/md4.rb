@@ -90,17 +90,6 @@ module CryptoToolchain
 
       attr_reader :original
 
-      F_FUNCTIONS = [
-        ->(b,c,d) { (b & c) | ((~b) & d) },
-        ->(b,c,d) { b ^ c ^ d },
-        ->(b,c,d) { (b & c) | (b & d) | (c & d) },
-        ->(b,c,d) { b ^ c ^ d },
-      ].freeze
-
-      K_CONSTANTS = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ].freeze
-
-      CONSTANTS = F_FUNCTIONS.zip(K_CONSTANTS).freeze
-
       # Equivalent to [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ] when using registers
       INITIAL_STATE = "67452301efcdab8998badcfe10325476c3d2e1f0".freeze
 
@@ -108,11 +97,6 @@ module CryptoToolchain
         raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
         raise ArgumentError.new("Argument must be 40 characters long") unless hex_str.length == 40
         hex_str.from_hex.unpack("L>*")
-      end
-
-      def f_and_k_for(i)
-        raise ArgumentError.new("i must be in 0..79") unless i >=0 && i <= 79
-        CONSTANTS[i/20]
       end
     end
   end
