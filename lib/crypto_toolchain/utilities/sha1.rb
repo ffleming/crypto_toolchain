@@ -3,11 +3,11 @@ module CryptoToolchain
   module Utilities
     class SHA1
       class << self
-        def hexdigest(str, state: INITIAL_STATE, append_length: nil )
+        def hexdigest(str, state: INITIAL_STATE, append_length: 0 )
           CryptoToolchain::Utilities::SHA1.new(str).hexdigest(state: state, append_length: append_length)
         end
 
-        def bindigest(str, state: INITIAL_STATE, append_length: nil)
+        def bindigest(str, state: INITIAL_STATE, append_length: 0)
           CryptoToolchain::Utilities::SHA1.new(str).bindigest(state: state, append_length: append_length)
         end
         alias_method :digest, :bindigest
@@ -22,18 +22,15 @@ module CryptoToolchain
         @original = message
       end
 
-      def hexdigest(state: INITIAL_STATE, append_length: nil)
+      def hexdigest(state: INITIAL_STATE, append_length: 0)
         bindigest(state: state, append_length: append_length).unpack("H*").join
       end
 
-      def bindigest(state: INITIAL_STATE, append_length: nil)
+      def bindigest(state: INITIAL_STATE, append_length: 0)
         h = registers_from(state).dup
 
-        length = if append_length.nil?
-                   original.bytesize
-                 else
-                   original.bytesize + append_length
-                 end
+        length = original.bytesize + append_length
+
         num_null_pad = (56 - (length + 1) ) % 64
         padding = 0x80.chr + (0.chr * num_null_pad) + [length * 8].pack("Q>")
 
