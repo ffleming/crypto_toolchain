@@ -79,10 +79,10 @@ module CryptoToolchain
       # Equivalent to [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ] when using registers
       INITIAL_STATE = "67452301efcdab8998badcfe10325476c3d2e1f0".freeze
 
-      def registers_from(arg)
+      def registers_from(hex_str)
         raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
         raise ArgumentError.new("Argument must be 40 characters long") unless hex_str.length == 40
-        arg.from_hex.unpack("L>*")
+        hex_str.from_hex.unpack("L>*")
       end
 
       def f_and_k_for(i)
