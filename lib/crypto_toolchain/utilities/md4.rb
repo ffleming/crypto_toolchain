@@ -28,11 +28,6 @@ module CryptoToolchain
 
       # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
-        f = -> (x,y,z) { (x & y) | (~x & z) }
-        g = -> (x,y,z) { (x & y) | (x & z) | (y & z) }
-        h = -> (x,y,z) { x ^ y ^ z }
-        r = -> (v,s)   { v.lrot(s) }
-
         running_state = registers_from(state)
 
         length = original.bytesize + append_length
@@ -46,22 +41,22 @@ module CryptoToolchain
 
           a, b, c, d = running_state
           [0, 4, 8, 12].each do |i|
-            a = r[a + f[b, c, d] + x[i],  3]
-            d = r[d + f[a, b, c] + x[i+1],  7]
-            c = r[c + f[d, a, b] + x[i+2], 11]
-            b = r[b + f[c, d, a] + x[i+3], 19]
+            a = (a + f(b, c, d) + x[i]).lrot(3)
+            d = (d + f(a, b, c) + x[i+1]).lrot(7)
+            c = (c + f(d, a, b) + x[i+2]).lrot(11)
+            b = (b + f(c, d, a) + x[i+3]).lrot(19)
           end
           [0, 1, 2, 3].each do |i|
-            a = r[a + g[b, c, d] + x[i] + 0x5a827999,  3]
-            d = r[d + g[a, b, c] + x[i+4] + 0x5a827999,  5]
-            c = r[c + g[d, a, b] + x[i+8] + 0x5a827999,  9]
-            b = r[b + g[c, d, a] + x[i+12] + 0x5a827999, 13]
+            a = (a + g(b, c, d) + x[i] + 0x5a827999).lrot(3)
+            d = (d + g(a, b, c) + x[i+4] + 0x5a827999).lrot(5)
+            c = (c + g(d, a, b) + x[i+8] + 0x5a827999).lrot(9)
+            b = (b + g(c, d, a) + x[i+12] + 0x5a827999).lrot(13)
           end
           [0, 2, 1, 3].each do |i|
-            a = r[a + h[b, c, d] + x[i] + 0x6ed9eba1,  3]
-            d = r[d + h[a, b, c] + x[i+8] + 0x6ed9eba1,  9]
-            c = r[c + h[d, a, b] + x[i+4] + 0x6ed9eba1, 11]
-            b = r[b + h[c, d, a] + x[i+12] + 0x6ed9eba1, 15]
+            a = (a + h(b, c, d) + x[i] + 0x6ed9eba1).lrot(3)
+            d = (d + h(a, b, c) + x[i+8] + 0x6ed9eba1).lrot(9)
+            c = (c + h(d, a, b) + x[i+4] + 0x6ed9eba1).lrot(11)
+            b = (b + h(c, d, a) + x[i+12] + 0x6ed9eba1).lrot(15)
           end
 
           [a, b, c, d].each_with_index do |val, i|
@@ -76,6 +71,18 @@ module CryptoToolchain
       private
 
       attr_reader :original
+
+      def f(x, y, z)
+         (x & y) | (~x & z)
+      end
+
+      def g(x, y, z)
+        (x & y) | (x & z) | (y & z)
+      end
+
+      def h(x, y, z)
+        x ^ y ^ z
+      end
 
       # Equivalent to [ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476 ]
       INITIAL_STATE = "0123456789abcdeffedcba9876543210"
