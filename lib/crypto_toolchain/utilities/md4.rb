@@ -36,7 +36,7 @@ module CryptoToolchain
         r = proc {|v, s| (v << s).&(mask) | (v.&(mask) >> (32 - s))}
 
         # initial hash
-        a, b, c, d = 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
+        a, b, c, d = registers_from(state)
 
         message = original.dup
         bit_len = message.size << 3
@@ -90,13 +90,13 @@ module CryptoToolchain
 
       attr_reader :original
 
-      # Equivalent to [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ] when using registers
-      INITIAL_STATE = "67452301efcdab8998badcfe10325476c3d2e1f0".freeze
+      # Equivalent to [ 0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476 ]
+      INITIAL_STATE = "67452301efcdab8998badcfe10325476".freeze
 
       def registers_from(hex_str)
         raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
-        raise ArgumentError.new("Argument must be 40 characters long") unless hex_str.length == 40
-        hex_str.from_hex.unpack("L>*")
+        raise ArgumentError.new("Argument must be 32 characters long") unless hex_str.length == 32
+        hex_str.from_hex.unpack("L>4")
       end
     end
   end
