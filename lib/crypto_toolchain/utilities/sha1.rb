@@ -61,19 +61,6 @@ module CryptoToolchain
       end
       alias_method :digest, :bindigest
 
-      # def padding
-      #   return @padding if defined? @padding
-        # We know that we're dealing with a bitlength that is a multiple of 8
-        # because we're working with chars.  To pad with a 1-bit, just go ahead
-        # and also pad with 7 0-bits.  That way we can just work with bytes
-        #
-        # The full message, including an 8-byte (64 bit) length segment, must
-        # be a multiple of 64 bytes (512 bits).  So pad such that
-        # str.length % 56 = 0.
-      #   num_null_pad = (56 - (original.bytesize + 1) ) % 64
-      #   @padding = 0x80.chr + (0.chr * num_null_pad) + [original.bytesize * 8].pack("Q>")
-      # end
-
       private
 
       attr_reader :original
