@@ -47,8 +47,12 @@ NB: These will probably never be finished
 * [x] Implement a SHA-1 keyed MAC
 * [x] Break a SHA-1 keyed MAC using length extension
 * [x] Break an MD4 keyed MAC using length extension
-* [ ] Implement and break HMAC-SHA1 with an artificial timing leak
-* [ ] Break HMAC-SHA1 with a slightly less artificial timing leak
+* [x] Implement and break HMAC-SHA1 with an artificial timing leak
+    * See [timing_attack](https://github.com/ffleming/timing_attack) for a timing attack tool
+    * See [camelflage](https://github.com/ffleming/camelflage) for the vulnerable server
+* [x] Break HMAC-SHA1 with a slightly less artificial timing leak
+    * See [timing_attack](https://github.com/ffleming/timing_attack) for a timing attack tool
+    * See [camelflage](https://github.com/ffleming/camelflage) for the vulnerable server
 
 ### Set 5: Diffie-Hellman & friends
 * [ ] Implement Diffie-Hellman
