@@ -44,7 +44,7 @@ module CryptoToolchain
         while (message.size % 64) != 56
           message += "\0"
         end
-        message = message.force_encoding('ascii-8bit') + [bit_len & mask, bit_len >> 32].pack("V2")
+        message = message.force_encoding('ascii-8bit') + [bit_len & mask, bit_len >> 32].pack("L<2")
 
         if message.size % 64 != 0
           fail "failed to pad to correct length"
@@ -54,7 +54,7 @@ module CryptoToolchain
         block = ""
 
         while io.read(64, block)
-          x = block.unpack("V16")
+          x = block.unpack("L<16")
 
           # Process this block.
           aa, bb, cc, dd = a, b, c, d
@@ -82,7 +82,7 @@ module CryptoToolchain
           d = (d + dd) & mask
         end
 
-        [a, b, c, d].pack("V4")
+        [a, b, c, d].pack("L<4")
       end
       alias_method :digest, :bindigest
 
