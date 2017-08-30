@@ -1,11 +1,7 @@
 # encoding: ASCII-8BIT
 class Integer
-  def to_bits
-    ensure_32_bit do
-      (self & 0xffffffff).
-        to_s(2).
-        rjust(32, "0")
-    end
+  def to_bits(pack_arg = "L>")
+    [self].pack(pack_arg).to_bits
   end
 
   def lrot(num)
