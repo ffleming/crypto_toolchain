@@ -28,11 +28,11 @@ module CryptoToolchain
 
       # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
-        mask = (1 << 32) - 1
-        f = proc {|x, y, z| x & y | x.^(mask) & z}
-        g = proc {|x, y, z| x & y | x & z | y & z}
-        h = proc {|x, y, z| x ^ y ^ z}
-        r = proc {|v, s| v.lrot(s) }
+        mask = 0xffffffff
+        f = -> (x,y,z) { x & y | x.^(mask) & z}
+        g = -> (x,y,z) { x & y | x & z | y & z}
+        h = -> (x,y,z) { x ^ y ^ z}
+        r = -> (v,s)   { v.lrot(s) }
 
         # initial hash
         a, b, c, d = registers_from(state)
