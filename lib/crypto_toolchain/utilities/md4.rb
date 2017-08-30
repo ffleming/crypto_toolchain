@@ -34,7 +34,6 @@ module CryptoToolchain
         h = -> (x,y,z) { x ^ y ^ z}
         r = -> (v,s)   { v.lrot(s) }
 
-        # initial hash
         a, b, c, d = registers_from(state)
 
         message = original.dup
