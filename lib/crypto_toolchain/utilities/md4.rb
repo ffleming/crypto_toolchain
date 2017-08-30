@@ -34,7 +34,7 @@ module CryptoToolchain
         h = -> (x,y,z) { x ^ y ^ z}
         r = -> (v,s)   { v.lrot(s) }
 
-        a, b, c, d = registers_from(state)
+        running_state = registers_from(state)
 
         message = original.dup
         length = message.bytesize + append_length
@@ -46,7 +46,7 @@ module CryptoToolchain
         (message + padding).in_blocks(64).each do |block|
           x = block.unpack("L<16")
 
-          aa, bb, cc, dd = a, b, c, d
+          a, b, c, d = running_state
           [0, 4, 8, 12].each do |i|
             a = r[a + f[b, c, d] + x[i],  3]
             d = r[d + f[a, b, c] + x[i+1],  7]
@@ -65,13 +65,13 @@ module CryptoToolchain
             c = r[c + h[d, a, b] + x[i+4] + 0x6ed9eba1, 11]
             b = r[b + h[c, d, a] + x[i+12] + 0x6ed9eba1, 15]
           end
-          a = (a + aa) & mask
-          b = (b + bb) & mask
-          c = (c + cc) & mask
-          d = (d + dd) & mask
+
+          [a, b, c, d].each_with_index do |val, i|
+            running_state[i] = (running_state[i] + val) & 0xffffffff
+          end
         end
 
-        [a, b, c, d].pack("L<4")
+        running_state.pack("L<4")
       end
       alias_method :digest, :bindigest
 
