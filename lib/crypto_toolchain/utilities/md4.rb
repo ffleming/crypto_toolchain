@@ -36,14 +36,13 @@ module CryptoToolchain
 
         running_state = registers_from(state)
 
-        message = original.dup
-        length = message.bytesize + append_length
+        length = original.bytesize + append_length
 
         padding_len = (56 - (length + 1) ) % 64
         str_length = [(length * 8)].pack("Q<")
         padding = (0x80.chr + (0.chr * padding_len) + str_length)
 
-        (message + padding).in_blocks(64).each do |block|
+        (original + padding).in_blocks(64).each do |block|
           x = block.unpack("L<16")
 
           a, b, c, d = running_state
