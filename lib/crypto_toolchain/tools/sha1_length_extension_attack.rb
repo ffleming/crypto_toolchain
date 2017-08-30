@@ -11,13 +11,12 @@ module CryptoToolchain
 
       # @return Array [msg, digest] Message that can be validated
       def execute
-        registers = CryptoToolchain::Utilities::SHA1.registers_for(mac)
         dummy_key = "A" * key_length
         padding = CryptoToolchain::Utilities::SHA1.padding(dummy_key + message)
         [
           message + padding + add,
           CryptoToolchain::Utilities::SHA1.hexdigest(add,
-                                                     registers: registers,
+                                                     state: mac,
                                                      append_length: (padding + message + dummy_key).length
                                                     )
         ]

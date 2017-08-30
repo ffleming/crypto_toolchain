@@ -3,12 +3,12 @@ module CryptoToolchain
   module Utilities
     class SHA1
       class << self
-        def hexdigest(str, registers: STARTING_REGISTERS, append_length: nil )
-          CryptoToolchain::Utilities::SHA1.new(str).hexdigest(registers: registers, append_length: append_length)
+        def hexdigest(str, state: INITIAL_STATE, append_length: nil )
+          CryptoToolchain::Utilities::SHA1.new(str).hexdigest(state: state, append_length: append_length)
         end
 
-        def bindigest(str, registers: STARTING_REGISTERS, append_length: nil)
-          CryptoToolchain::Utilities::SHA1.new(str).bindigest(registers: registers, append_length: append_length)
+        def bindigest(str, state: INITIAL_STATE, append_length: nil)
+          CryptoToolchain::Utilities::SHA1.new(str).bindigest(state: state, append_length: append_length)
         end
         alias_method :digest, :bindigest
 
@@ -16,27 +16,18 @@ module CryptoToolchain
           num_null_pad = (56 - (str.bytesize + 1) ) % 64
           0x80.chr + (0.chr * num_null_pad) + [str.bytesize * 8].pack("Q>")
         end
-
-        def registers_for(hex_str)
-          raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
-          raise ArgumentError.new("Argument must be 160 characters long") unless hex_str.length == 40
-          hex_str.from_hex.in_blocks(4).flat_map { |block| block.unpack("L>") }
-        end
       end
 
       def initialize(message)
         @original = message
       end
 
-      def hexdigest(registers: STARTING_REGISTERS, append_length: nil)
-        bindigest(registers: registers, append_length: append_length).unpack("H*").join
+      def hexdigest(state: INITIAL_STATE, append_length: nil)
+        bindigest(state: state, append_length: append_length).unpack("H*").join
       end
 
-      def bindigest(registers: STARTING_REGISTERS, append_length: nil)
-        unless registers.is_a?(Array) && registers.length == 5
-          raise ArgumentError.new("registers must be a 5-element array")
-        end
-        h = registers.dup
+      def bindigest(state: INITIAL_STATE, append_length: nil)
+        h = registers_from(state).dup
 
         length = if append_length.nil?
                    original.bytesize
@@ -101,7 +92,14 @@ module CryptoToolchain
 
       CONSTANTS = F_FUNCTIONS.zip(K_CONSTANTS).freeze
 
-      STARTING_REGISTERS = [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ].freeze
+      # Equivalent to [ 0x67452301, 0xefcdaB89, 0x98badcfe, 0x10325476, 0xc3d2e1f0 ] when using registers
+      INITIAL_STATE = "67452301efcdab8998badcfe10325476c3d2e1f0".freeze
+
+      def registers_from(arg)
+        raise ArgumentError.new("Argument must be a hex string") unless hex_str.hex?
+        raise ArgumentError.new("Argument must be 40 characters long") unless hex_str.length == 40
+        arg.from_hex.unpack("L>*")
+      end
 
       def f_and_k_for(i)
         raise ArgumentError.new("i must be in 0..79") unless i >=0 && i <= 79
