@@ -28,10 +28,9 @@ module CryptoToolchain
 
       # Copied from https://rosettacode.org/wiki/MD4#Ruby, with minor modifications
       def bindigest(state: INITIAL_STATE, append_length: 0)
-        mask = 0xffffffff
-        f = -> (x,y,z) { x & y | x.^(mask) & z}
-        g = -> (x,y,z) { x & y | x & z | y & z}
-        h = -> (x,y,z) { x ^ y ^ z}
+        f = -> (x,y,z) { (x & y) | (~x & z) }
+        g = -> (x,y,z) { (x & y) | (x & z) | (y & z) }
+        h = -> (x,y,z) { x ^ y ^ z }
         r = -> (v,s)   { v.lrot(s) }
 
         running_state = registers_from(state)
