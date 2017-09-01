@@ -1,7 +1,7 @@
 module CryptoToolchain
   module DiffieHellman
     class Peer
-      def initialize(debug: false, name: SecureRandom.uuid, p: NIST_P, g: NIST_G)
+      def initialize(debug: true, name: SecureRandom.uuid, p: NIST_P, g: NIST_G)
         @addresses = {}
         @channel = Queue.new
         @name = name
@@ -56,7 +56,11 @@ module CryptoToolchain
         end
         info.update(p: p, g: g, pubkey: msg.pubkey)
         info.set_shared_secret(privkey)
-        puts "#{name} generated secret #{info.shared_secret}" if debug
+        if debug
+          puts "#{name} will use p = #{p}"
+          puts "#{name} will use g = #{g}"
+          puts "#{name} generated secret #{info.shared_secret} for #{msg.peer.name}"
+        end
       end
 
       def datum_response(msg)
@@ -78,11 +82,6 @@ module CryptoToolchain
         end
       end
 
-      def shared_secret_for(peer_info)
-        raise RuntimeError.new("Can't generate shared secret until p has been set") if p.nil?
-        peer_info.pubkey.modexp(privkey, p)
-      end
-
       def send_msg(peer, message)
         puts "#{name} sends #{message.class.to_s.split(':').last} to #{peer.name}" if debug
         peer.channel.enq(message)
@@ -90,15 +89,13 @@ module CryptoToolchain
 
       def info_for(peer)
         info = addresses[peer.name]
-        if info.nil?
-          raise StandardError.new("Peer #{peer.name} is unknown to #{name}")
-        end
+        raise StandardError.new("Peer #{peer.name} is unknown to #{name}") if info.nil?
         info
       end
 
       def pubkey
         raise RuntimeError.new("Can't generate public key until p has been set") if p.nil?
-        @pubkey ||= g.modexp(privkey, p)
+        g.modexp(privkey, p)
       end
 
       def privkey

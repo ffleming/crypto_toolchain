@@ -34,7 +34,9 @@ module CryptoToolchain
 
       def update(hsh)
         hsh.each do |k, v|
-          self.send("#{k}=", v)
+          unless v.nil?
+            self.send("#{k}=", v)
+          end
         end
       end
     end
