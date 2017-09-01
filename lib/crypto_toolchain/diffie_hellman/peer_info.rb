@@ -11,6 +11,16 @@ module CryptoToolchain
       attr_reader :peer, :channel, :shared_secret
       attr_accessor :p, :g, :pubkey
 
+      def to_h
+        {
+          name:   peer.name,
+          p:      p,
+          g:      g,
+          pubkey: pubkey,
+          secret: shared_secret
+        }
+      end
+
       def set_shared_secret(privkey)
         @shared_secret = pubkey.modexp(privkey, p)
       end

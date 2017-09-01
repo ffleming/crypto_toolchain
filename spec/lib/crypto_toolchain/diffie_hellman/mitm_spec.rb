@@ -41,8 +41,17 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     a.send_msg(mitm, encrypted)
 
     sleep(0.025)
-    expect(mitm.received_messages.map(&:contents)).to eq [plaintext, plaintext]
-    expect(mitm.received_messages.map(&:from)).to match_array [a.name, b.name]
+    aggregate_failures do
+      expect(mitm.received_messages.map(&:contents)).to eq [plaintext, plaintext]
+      expect(mitm.received_messages.map(&:from)).to match_array [a.name, b.name]
+      # we've replaced the public key with p so
+      #   s = p**n % p
+      #   s = 0
+      [a, b, mitm].each do |peer|
+        peer.addresses do |name, info|
+          expect(info.shared_secret).to eq 0
+        end
+      end
+    end
   end
 end
-
