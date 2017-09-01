@@ -55,7 +55,7 @@ NB: These will probably never be finished
     * See [camelflage](https://github.com/ffleming/camelflage) for the vulnerable server
 
 ### Set 5: Diffie-Hellman & friends
-* [ ] Implement Diffie-Hellman
+* [x] Implement Diffie-Hellman
 * [ ] Implement a MITM key-fixing attack on Diffie-Hellman with parameter injection
 * [ ] Implement DH with negotiated groups, and break with malicious "g" parameters
 * [ ] Implement Secure Remote Password (SRP)
