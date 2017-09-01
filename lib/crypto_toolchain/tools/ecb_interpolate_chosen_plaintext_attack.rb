@@ -67,17 +67,6 @@ module CryptoToolchain
           end
         end
       end
-
-      def prefix_size
-        original_length = oracle.encrypt(PAD * blocksize).length
-        (0..Float::INFINITY).each do |i|
-          padding = (PAD * blocksize) + (PAD * i)
-          len = oracle.encrypt(padding).length
-          if len != original_length
-            return padding.length
-          end
-        end
-      end
     end
   end
 end

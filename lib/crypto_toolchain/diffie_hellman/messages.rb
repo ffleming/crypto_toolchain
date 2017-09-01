@@ -28,6 +28,22 @@ module CryptoToolchain
         attr_reader :p, :g, :peer, :pubkey, :initial
         alias_method :initial?, :initial
       end
+
+      class Datum
+        def initialize(peer: , contents: , initial: false)
+          @peer = peer
+          @contents = contents
+          @initial = initial
+        end
+
+        def decrypt(key: )
+          iv = contents[0..15]
+          contents[16..-1].decrypt_cbc(key: key, iv: iv)
+        end
+
+        attr_reader :peer, :contents, :initial
+        alias_method :initial?, :initial
+      end
     end
   end
 end

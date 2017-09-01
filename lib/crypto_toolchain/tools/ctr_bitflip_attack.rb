@@ -19,13 +19,6 @@ module CryptoToolchain
 
       attr_reader :target
 
-      def prefix
-        "comment1=cooking%20MCs;userdata="
-      end
-
-      def suffix
-        ";comment2=%20like%20a%20pound%20of%20bacon"
-      end
     end
   end
 end

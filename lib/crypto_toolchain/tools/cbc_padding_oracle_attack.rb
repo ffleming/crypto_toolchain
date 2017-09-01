@@ -29,18 +29,6 @@ module CryptoToolchain
       private
 
       def intermediate_block(preceding: , target: )
-        intermediate = "\x00" * target.size
-        (0...target.bytesize).to_a.each do |i|
-          intermediate = build_intermediate(
-            index: ((target.bytesize - 1) - i),
-            target: target,
-            preceding: preceding,
-            intermediate: intermediate)
-        end
-        intermediate
-      end
-
-      def intermediate_block(preceding: , target: )
         range = Array(0...blocksize).reverse
         range.each_with_object(0x00.chr * blocksize) do |index, memo|
           pad = blocksize - index

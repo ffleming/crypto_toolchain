@@ -190,7 +190,7 @@ class String
   def bitflip(bit_index, byte_index: 0)
     byte_offset, bit_offset = bit_index.divmod(8)
     byte_offset += byte_index
-    target = self.clone
+    target = self.dup
     target[byte_offset] = (target[byte_offset].ord ^  (1 << (7-bit_offset))).chr
     target
   end
@@ -218,6 +218,18 @@ class String
     _blocks.length > _blocks.uniq.length
   end
   alias_method :is_ecb_encrypted?, :contains_duplicate_blocks?
+
+  # Thanks Ruby Facets!
+  def snakecase
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+      gsub(/([a-z\d])([A-Z])/,'\1_\2').
+      tr('-', '_').
+      gsub(/\s/, '_').
+      gsub(/__+/, '_').
+      downcase
+  end
+  alias_method :snake_case, :snakecase
+  alias_method :underscore, :snakecase
 
   protected
 
