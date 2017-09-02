@@ -73,11 +73,11 @@ RSpec.describe "Cryptopals Set 5" do
     end
 
     it "should set the shared secret to 1 (35a)" do
-      mitm = CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
-                                                                peer_a: a,
-                                                                peer_b: b,
-                                                                p: p,
-                                                                g: 1)
+      mitm = CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
+                                                      peer_a: a,
+                                                      peer_b: b,
+                                                      p: p,
+                                                      g: 1)
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
       mitm.send_msg(b, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
@@ -109,11 +109,11 @@ RSpec.describe "Cryptopals Set 5" do
     end
 
     it "should set the shared secret to 0 (35b)" do
-      mitm = CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
-                                                                peer_a: a,
-                                                                peer_b: b,
-                                                                p: p,
-                                                                g: p)
+      mitm = CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
+                                                      peer_a: a,
+                                                      peer_b: b,
+                                                      p: p,
+                                                      g: p)
 
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
@@ -147,11 +147,11 @@ RSpec.describe "Cryptopals Set 5" do
 
 
     it "should set the shared secret to 1 (35c)" do
-      mitm = CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
-                                                                peer_a: a,
-                                                                peer_b: b,
-                                                                p: p,
-                                                                g: p-1)
+      mitm = CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
+                                                      peer_a: a,
+                                                      peer_b: b,
+                                                      p: p,
+                                                      g: p-1)
 
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
