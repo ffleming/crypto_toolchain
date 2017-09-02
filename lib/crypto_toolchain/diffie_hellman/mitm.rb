@@ -47,14 +47,6 @@ module CryptoToolchain
         peer == peer_a ? peer_b : peer_a
       end
 
-      def injected_initial_key_exchange
-        Messages::KeyExchange.new(peer: self, pubkey: p, p: p, g: g, initial: true)
-      end
-
-      def injected_b_to_a_pubkey
-        Messages::KeyExchange.new(peer: self, pubkey: p, initial: false)
-      end
-
      attr_reader :peer_a, :peer_b
     end
   end
