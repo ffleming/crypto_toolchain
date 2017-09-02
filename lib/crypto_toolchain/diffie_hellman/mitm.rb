@@ -25,14 +25,6 @@ module CryptoToolchain
         end
       end
 
-      def valid_pubkey?
-        pubkey < p
-      end
-
-      def invalid_pubkey?
-        !valid_pubkey?
-      end
-
       def key_exchange_response(msg)
         info = info_for(msg.peer)
         info.update(pubkey: msg.pubkey)

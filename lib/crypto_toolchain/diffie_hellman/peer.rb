@@ -115,6 +115,14 @@ module CryptoToolchain
         Messages::Datum.new(peer: self, contents: encrypted, initial: initial)
       end
 
+      def valid_pubkey?
+        pubkey < p
+      end
+
+      def invalid_pubkey?
+        !valid_pubkey?
+      end
+
       attr_reader :addresses, :channel, :name, :debug, :p, :g, :received_messages
       alias_method :debug?, :debug
     end
