@@ -42,7 +42,8 @@ module CryptoToolchain
       def peer_address_response(msg)
         add_address(msg.peer)
         if msg.initial?
-          send_msg msg.peer, my_address_message
+          my_addr = Messages::PeerAddress.new(peer: self, channel: self.channel, initial: false)
+          send_msg msg.peer, my_addr
         end
         puts "#{name} added #{msg.peer.name}" if debug
       end
@@ -102,10 +103,6 @@ module CryptoToolchain
       def privkey
         raise RuntimeError.new("Can't generate private key until p has been set") if p.nil?
         @privkey ||= rand(1..0xffffffff) % p
-      end
-
-      def my_address_message(initial: false)
-        Messages::PeerAddress.new(peer: self, channel: self.channel, initial: initial)
       end
 
       def encrypted_message_for(peer, message: , initial: false)
