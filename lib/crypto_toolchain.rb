@@ -10,6 +10,7 @@ require "crypto_toolchain/utilities"
 require "crypto_toolchain/tools"
 require "crypto_toolchain/black_boxes"
 require "crypto_toolchain/diffie_hellman"
+require "crypto_toolchain/srp"
 
 module CryptoToolchain
   AES_BLOCK_SIZE = 16
