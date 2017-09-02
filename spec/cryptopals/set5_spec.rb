@@ -9,10 +9,6 @@ RSpec.describe "Cryptopals Set 5" do
                                                        p: CryptoToolchain::NIST_P,
                                                        g: CryptoToolchain::NIST_G) }
     let(:b) { CryptoToolchain::DiffieHellman::Peer.new(name: "B", p: nil, g: nil) }
-    let(:mitm) { CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
-                                                          peer_a: a,
-                                                          peer_b: b) }
-
 
     def begin_processing_for(*peers)
       @peers = peers
@@ -43,18 +39,19 @@ RSpec.describe "Cryptopals Set 5" do
     end
 
     it "should perform a man-in-the-middle parameter-injection attack between two peers (34)" do
+      p = CryptoToolchain::NIST_P
+      mitm =  CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
+                                                       peer_a: a,
+                                                       peer_b: b,
+                                                       p: p,
+                                                       pubkey: p)
       begin_processing_for(mitm, b, a)
       a.send_msg(mitm, msg::PeerAddress.new(peer: a, channel: a.channel, initial: true))
       # Processing time for address exchange before we send key exchange, otherwise the
       # peers won't know each others' addresses
       sleep(0.025)
 
-      init_key_exchange_from_a = msg::KeyExchange.new(peer: a,
-                                                      p: a.p,
-                                                      g: a.g,
-                                                      pubkey: a.pubkey, initial: true)
-
-      a.send_msg(mitm, init_key_exchange_from_a)
+      mitm.do_key_exchange
       sleep(0.025)
       plaintext = "I like dogs"
       encrypted = a.encrypted_message_for(mitm, message: plaintext, initial: true)

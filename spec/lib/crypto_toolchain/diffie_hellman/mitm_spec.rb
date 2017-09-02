@@ -12,7 +12,6 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
                                                         p: p,
                                                         pubkey: p) }
 
-
   def begin_processing_for(*peers)
     @peers = peers
     @threads = peers.map do |peer|
@@ -32,12 +31,6 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     # peers won't know each others' addresses
     sleep(0.025)
 
-    # init_key_exchange_from_a = msg::KeyExchange.new(peer: a,
-    #                                                 p: a.p,
-    #                                                 g: a.g,
-    #                                                 pubkey: a.pubkey, initial: true)
-    #
-    # a.send_msg(mitm, init_key_exchange_from_a)
     mitm.do_key_exchange
     sleep(0.025)
     plaintext = "I like dogs"
