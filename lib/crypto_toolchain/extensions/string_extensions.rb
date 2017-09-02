@@ -25,6 +25,13 @@ class String
     self !~ /[^0-9a-f]/i
   end
 
+  def swap_endian
+    raise ArgumentError.new("Bytesize must be multiple of 4") unless bytesize % 4 == 0
+    unpack("L<*").pack("L>*")
+  end
+
+  alias_method :swap_endianness, :swap_endian
+
   def to_base64(strict: true)
     if strict
       Base64.strict_encode64(self)
