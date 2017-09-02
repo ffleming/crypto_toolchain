@@ -57,7 +57,7 @@ NB: These will probably never be finished
 ### Set 5: Diffie-Hellman & friends
 * [x] Implement Diffie-Hellman
 * [x] Implement a MITM key-fixing attack on Diffie-Hellman with parameter injection
-* [ ] Implement DH with negotiated groups, and break with malicious "g" parameters
+* [x] Implement DH with negotiated groups, and break with malicious "g" parameters
 * [ ] Implement Secure Remote Password (SRP)
 * [ ] Break SRP with a zero key
 * [ ] Offline dictionary attack on simplified SRP

@@ -27,6 +27,10 @@ module CryptoToolchain
         end
         attr_reader :p, :g, :peer, :pubkey, :initial
         alias_method :initial?, :initial
+
+        def to_s
+          "PEER: #{peer.name} P: #{p} G: #{g} PUBKEY: #{pubkey % 1000}"
+        end
       end
 
       class Datum

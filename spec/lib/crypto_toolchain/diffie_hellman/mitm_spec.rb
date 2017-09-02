@@ -5,9 +5,12 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
                                                      p: CryptoToolchain::NIST_P,
                                                      g: CryptoToolchain::NIST_G) }
   let(:b) { CryptoToolchain::DiffieHellman::Peer.new(name: "B", p: nil, g: nil) }
+  let(:p) { CryptoToolchain::NIST_P }
   let(:mitm) { CryptoToolchain::DiffieHellman::MITM.new(name: "MITM",
                                                         peer_a: a,
-                                                        peer_b: b) }
+                                                        peer_b: b,
+                                                        p: p,
+                                                        pubkey: p) }
 
 
   def begin_processing_for(*peers)
@@ -29,12 +32,13 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     # peers won't know each others' addresses
     sleep(0.025)
 
-    init_key_exchange_from_a = msg::KeyExchange.new(peer: a,
-                                                    p: a.p,
-                                                    g: a.g,
-                                                    pubkey: a.pubkey, initial: true)
-
-    a.send_msg(mitm, init_key_exchange_from_a)
+    # init_key_exchange_from_a = msg::KeyExchange.new(peer: a,
+    #                                                 p: a.p,
+    #                                                 g: a.g,
+    #                                                 pubkey: a.pubkey, initial: true)
+    #
+    # a.send_msg(mitm, init_key_exchange_from_a)
+    mitm.do_key_exchange
     sleep(0.025)
     plaintext = "I like dogs"
     encrypted = a.encrypted_message_for(mitm, message: plaintext, initial: true)

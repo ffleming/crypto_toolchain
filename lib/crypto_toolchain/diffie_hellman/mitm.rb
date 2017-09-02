@@ -1,9 +1,11 @@
+Thread.abort_on_exception = true
 module CryptoToolchain
   module DiffieHellman
     class MITM < Peer
-      def initialize(debug: false, name: "MITM", p: NIST_P, g: NIST_G, peer_a: , peer_b: )
+      def initialize(debug: false, name: "MITM", p: NIST_P, g: NIST_G, peer_a: , peer_b: , pubkey: nil)
         @peer_a = peer_a
         @peer_b = peer_b
+        @pubkey = pubkey
         super(debug: debug, name: name, p: p, g: g)
         [peer_a, peer_b].each do |peer|
           puts "Adding #{peer.name} to #{name} at startup" if debug
@@ -15,18 +17,20 @@ module CryptoToolchain
         send_msg other_peer(msg.peer), my_address_message(initial: msg.initial)
       end
 
+      def do_key_exchange
+        msg = Messages::KeyExchange.new(peer: self, pubkey: pubkey, p: p, g: g, initial: true)
+        [peer_a, peer_b].each do |peer|
+          info_for(peer).update(p: p, g: g)
+          send_msg(peer, msg)
+        end
+      end
+
       def key_exchange_response(msg)
         info = info_for(msg.peer)
-        other = other_peer(msg.peer)
-        if msg.initial?
-          @p = msg.p
-          @g = msg.g
-          send_msg(other, injected_initial_key_exchange)
-        else
-          send_msg(other, injected_b_to_a_pubkey)
-        end
-        info.update(p: p, g: g, pubkey: p)
+        info.update(pubkey: msg.pubkey)
+        # Ignore what their actual pubkey is - we tricked them into settling upon a secret of 0
         info.set_shared_secret(privkey)
+        info.instance_variable_set("@shared_secret", 0)
         puts "#{name} generated secret #{info.shared_secret} for #{msg.peer.name}" if debug
       end
 

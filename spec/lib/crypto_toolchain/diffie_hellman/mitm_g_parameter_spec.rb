@@ -1,8 +1,9 @@
 require 'spec_helper'
-RSpec.describe CryptoToolchain::DiffieHellman::MITM do
+RSpec.describe CryptoToolchain::DiffieHellman::MITMGParameter do
   let(:msg) { CryptoToolchain::DiffieHellman::Messages }
   let(:a) { CryptoToolchain::DiffieHellman::Peer.new(name: "A", p: nil, g: nil) }
   let(:b) { CryptoToolchain::DiffieHellman::Peer.new(name: "B", p: nil, g: nil) }
+  let(:p) { CryptoToolchain::NIST_P }
 
   def begin_processing_for(*peers)
     @peers = peers
@@ -16,11 +17,12 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     @threads.each(&:join)
   end
 
-  context "g = 1" do
+  context "fixing g to 1" do
     let(:mitm) { CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
                                                                     peer_a: a,
                                                                     peer_b: b,
-                                                                    new_g: :one) }
+                                                                    p: p,
+                                                                    g: 1) }
 
 
     it "should set the shared secret to 1 (35a)" do
@@ -59,9 +61,10 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     let(:mitm) { CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
                                                                     peer_a: a,
                                                                     peer_b: b,
-                                                                    new_g: :p) }
+                                                                    p: p,
+                                                                    g: p) }
 
-    it "should et the shared secret to 0 (35b)" do
+    it "should set the shared secret to 0 (35b)" do
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
       mitm.send_msg(b, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
@@ -97,18 +100,18 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
     let(:mitm) { CryptoToolchain::DiffieHellman::MITMGParameter.new(name: "MITM",
                                                                     peer_a: a,
                                                                     peer_b: b,
-                                                                    new_g: :p_minus_one) }
+                                                                    p: p,
+                                                                    g: p-1) }
 
-    it "should et the shared secret to SSSSSSSSSSS (35c)" do
+    it "should set the shared secret to 1 (35c)" do
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
       mitm.send_msg(b, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
-      # Processing time for address exchange before we send key exchange, otherwise the
-      # peers won't know each others' addresses
+
       sleep(0.025)
 
       mitm.do_key_exchange
-      sleep(0.025)
+      sleep(0.050)
       plaintext = "I like dogs"
       encrypted = a.encrypted_message_for(mitm, message: plaintext, initial: true)
       a.send_msg(mitm, encrypted)
@@ -118,13 +121,14 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITM do
         expect(mitm.received_messages.map(&:contents)).to eq [plaintext, plaintext]
         expect(mitm.received_messages.map(&:from)).to match_array [a.name, b.name]
         # we've replaced g with p so
-        #   pubkey = (p-1)**privkey % p
-        #          = 1
-        #   secret = 1**privkey % p
-        #          = 1
+        #   pubkey = p-1**privkey % p
+        #          = 1 OR (p-1) depending on if privkey is odd or even
+        #   secret = (1 or p-1)**privkey % p
+        #          = 1 OR (p-1)
+        expected = [p-1, 1]
         [a, b, mitm].each do |peer|
           peer.addresses.each do |_, info|
-            puts info.pubkey
+            expect(expected).to include(info.shared_secret)
           end
         end
       end

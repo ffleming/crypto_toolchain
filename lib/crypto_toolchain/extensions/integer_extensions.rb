@@ -19,7 +19,7 @@ class Integer
     raise ArgumentError.new("Exponent must be non-negative") if exponent < 0
     product = 1
     base = self % mod
-    until exponent == 0
+    while exponent > 0
       if exponent & 0x01 == 1
         product = (product * base) % mod
       end
