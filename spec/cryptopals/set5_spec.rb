@@ -183,4 +183,59 @@ RSpec.describe "Cryptopals Set 5" do
       end
     end
   end
+
+  describe "SRP challenges" do
+    def start_threading(*instances)
+      @threads = instances.map do |p|
+        Thread.new { p.go! }
+      end
+    end
+
+    let(:sockets) { UNIXSocket.pair }
+    let(:s1) { sockets.first }
+    let(:s2) { sockets.last }
+    let(:server) { CryptoToolchain::SRP::Server.new(socket: s2) }
+
+    after(:each) { @threads.each(&:join) }
+
+    it "should negotiate a shared secret and authenticate (36)" do
+      client = CryptoToolchain::SRP::Client.new(socket: s1)
+      start_threading(client, server)
+      client.send_hello
+      sleep(0.25)
+
+      expect(client.key).to eq server.key
+      expect(client.authenticated?).to be true
+    end
+
+    it "should be able to bypass authentication by setting its pubkey to 0 (37a)" do
+      client = CryptoToolchain::SRP::Client.new(socket: s1, pubkey: 0)
+      start_threading(client, server)
+      client.send_hello
+      sleep(0.25)
+
+      expect(server.key).to eq Digest::SHA256.hexdigest("0")
+      expect(client.authenticated?).to be true
+    end
+
+    it "should be able to bypass authentication by setting its pubkey to N (37b)" do
+      client = CryptoToolchain::SRP::Client.new(socket: s1, pubkey: CryptoToolchain::NIST_P)
+      start_threading(client, server)
+      client.send_hello
+      sleep(0.25)
+
+      expect(server.key).to eq Digest::SHA256.hexdigest("0")
+      expect(client.authenticated?).to be true
+    end
+
+    it "should be able to bypass authentication by setting its pubkey to N (37c)" do
+      client = CryptoToolchain::SRP::Client.new(socket: s1, pubkey: CryptoToolchain::NIST_P**2)
+      start_threading(client, server)
+      client.send_hello
+      sleep(0.25)
+
+      expect(server.key).to eq Digest::SHA256.hexdigest("0")
+      expect(client.authenticated?).to be true
+    end
+  end
 end
