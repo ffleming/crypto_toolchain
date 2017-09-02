@@ -21,8 +21,8 @@ module CryptoToolchain
         }
       end
 
-      def set_shared_secret(privkey)
-        @shared_secret = pubkey.modexp(privkey, p)
+      def set_shared_secret(privkey, override: nil)
+        @shared_secret = override ? override : pubkey.modexp(privkey, p)
       end
 
       def session_key

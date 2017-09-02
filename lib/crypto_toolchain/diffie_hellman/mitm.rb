@@ -25,12 +25,19 @@ module CryptoToolchain
         end
       end
 
+      def valid_pubkey?
+        pubkey < p
+      end
+
+      def invalid_pubkey?
+        !valid_pubkey?
+      end
+
       def key_exchange_response(msg)
         info = info_for(msg.peer)
         info.update(pubkey: msg.pubkey)
-        # Ignore what their actual pubkey is - we tricked them into settling upon a secret of 0
-        info.set_shared_secret(privkey)
-        info.instance_variable_set("@shared_secret", 0)
+        secret_override = invalid_pubkey? ? 0 : nil
+        info.set_shared_secret(privkey, override: secret_override)
         puts "#{name} generated secret #{info.shared_secret} for #{msg.peer.name}" if debug
       end
 
