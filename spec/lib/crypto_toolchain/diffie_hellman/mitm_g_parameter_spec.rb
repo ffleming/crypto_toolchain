@@ -24,7 +24,6 @@ RSpec.describe CryptoToolchain::DiffieHellman::MITMGParameter do
                                                                     p: p,
                                                                     g: 1) }
 
-
     it "should set the shared secret to 1 (35a)" do
       begin_processing_for(mitm, b, a)
       mitm.send_msg(a, msg::PeerAddress.new(peer: mitm, channel: mitm.channel, initial: true))
