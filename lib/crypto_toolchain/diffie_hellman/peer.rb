@@ -91,7 +91,7 @@ module CryptoToolchain
       end
 
       def info_for(peer)
-        addresses[peer.name]
+        addresses.fetch(peer.name)
       end
 
       def pubkey
