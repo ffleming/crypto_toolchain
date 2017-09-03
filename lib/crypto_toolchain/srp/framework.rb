@@ -39,7 +39,7 @@ module CryptoToolchain
       end
 
       def shutdown_received(*args)
-        raise ShutdownSignal.new
+        raise ShutdownSignal
       end
 
       def write_message(*args)
