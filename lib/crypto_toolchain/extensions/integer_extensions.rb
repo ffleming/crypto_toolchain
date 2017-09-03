@@ -14,7 +14,25 @@ class Integer
       ((self << (32 - num)) & 0xffffffff)
   end
 
-  # Thanks Bruce Schneier
+  # From Wikipedia:
+  # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Pseudocode
+  def invmod(n)
+    a = self
+    t = 0
+    new_t = 1
+    r = n
+    new_r = a
+    while new_r != 0
+        quotient = r / new_r
+        t, new_t = new_t, (t - quotient * new_t)
+        r, new_r = new_r, (r - quotient * new_r)
+    end
+    raise ArgumentError.new("#{self} is not invertible") if r > 1
+    t += n if t < 0
+    t
+  end
+  alias_method :mod_inverse, :invmod
+
   def modexp(exponent, mod)
     raise ArgumentError.new("Exponent must be non-negative") if exponent < 0
     product = 1

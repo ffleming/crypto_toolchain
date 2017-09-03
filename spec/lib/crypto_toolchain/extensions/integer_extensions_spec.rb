@@ -25,4 +25,14 @@ RSpec.describe "Integer extensions" do
       end
     end
   end
+
+  describe "#invmod" do
+    it "should match the output of OpenSSL's mod_inverse" do
+      aggregate_failures do
+        YAML.load_file("spec/fixtures/invmod.yml").each do |x, y|
+          expect(x.invmod(y)).to eq x.to_bn.mod_inverse(y)
+        end
+      end
+    end
+  end
 end
