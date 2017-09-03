@@ -34,7 +34,7 @@ RSpec.describe CryptoToolchain::SRP::Client do
     expect(client.authenticated?).to be true
   end
 
-  it "should be able to bypass authentication by setting its pubkey to N (37c)" do
+  it "should be able to bypass authentication by setting its pubkey to N**2 (37c)" do
     client = CryptoToolchain::SRP::Client.new(socket: s1, pubkey: CryptoToolchain::NIST_P**2)
     start_threading(client, server)
     client.send_hello
