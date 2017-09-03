@@ -40,7 +40,9 @@ module CryptoToolchain
       end
 
       def plaintext(_p_prime)
-        ((_p_prime * s.invmod(n)) % n).to_bin_string
+        (
+          (_p_prime * s.invmod(n)) % n
+        ).to_bin_string
       end
     end
   end
