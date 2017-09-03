@@ -278,5 +278,17 @@ RSpec.describe "Cryptopals Set 5" do
       dec = (k2.decrypt(enc))
       expect(dec).to eq plain
     end
+
+    it "should break RSA given no padding and the same ciphertet encrypted multiple times" do
+      keypairs = [k1, k2, CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits)]
+      ciphers = keypairs.map {|k| k1.encrypt(plain, to: k.public_key).to_i(16) }
+      pubkeys = keypairs.map(&:public_key)
+      inputs = ciphers.zip(pubkeys).map do |c, k|
+        CryptoToolchain::Tools::RSABroadcastAttack::Input.new(c, k)
+      end
+      atk = CryptoToolchain::Tools::RSABroadcastAttack.new(inputs)
+      result = atk.execute
+      expect(result).to eq plain
+    end
   end
 end
