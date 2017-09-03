@@ -13,7 +13,7 @@ module CryptoToolchain
         @d = @e.invmod(et)
       end
 
-      def encrypt(m, to: private_key)
+      def encrypt(m, to: )
         raise ArgumentError.new("Message should be a string") unless m.is_a?(String)
         m.
           to_hex.
