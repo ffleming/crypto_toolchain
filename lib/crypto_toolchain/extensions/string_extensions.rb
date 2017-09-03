@@ -73,6 +73,10 @@ class String
     ljust(len, self)
   end
 
+  def to_number
+    to_hex.to_i(16)
+  end
+
   def hamming_distance(other)
     (self ^ other).to_bits.count("1")
   end

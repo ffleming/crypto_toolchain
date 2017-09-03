@@ -13,6 +13,7 @@ require "crypto_toolchain/tools/cbc_iv_equals_key_attack"
 require "crypto_toolchain/tools/sha1_length_extension_attack"
 require "crypto_toolchain/tools/md4_length_extension_attack"
 require "crypto_toolchain/tools/rsa_broadcast_attack"
+require "crypto_toolchain/tools/rsa_unpadded_message_recovery_attack"
 
 module CryptoToolchain
   module Tools

@@ -65,7 +65,7 @@ NB: These will probably never be finished
 * [x] Implement an E=3 RSA Broadcast attack
 
 ### Set 6: RSA & DSA
-* [ ] Implement unpadded message recovery oracle
+* [x] Implement unpadded message recovery oracle
 * [ ] Bleichenbacher's e=3 RSA Attack
 * [ ] DSA key recovery from nonce
 * [ ] DSA nonce recovery from repeated nonce

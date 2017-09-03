@@ -281,7 +281,7 @@ RSpec.describe "Cryptopals Set 5" do
 
     it "should break RSA given no padding and the same ciphertet encrypted multiple times (40)" do
       keypairs = [k1, k2, CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits)]
-      ciphers = keypairs.map {|k| k1.encrypt(plain, to: k.public_key).to_i(16) }
+      ciphers = keypairs.map {|k| k1.encrypt(plain, to: k.public_key).to_number }
       pubkeys = keypairs.map(&:public_key)
       inputs = ciphers.zip(pubkeys).map do |c, k|
         CryptoToolchain::Tools::RSABroadcastAttack::Input.new(c, k)

@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe CryptoToolchain::Tools::RSABroadcastAttack do
-  let(:bits) { 256 }
+  let(:bits) { 512 }
   let(:sender) { CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits) }
   let(:keypairs) do
     [
@@ -11,7 +11,7 @@ RSpec.describe CryptoToolchain::Tools::RSABroadcastAttack do
     ]
   end
   let(:plain) { "Sometimes poodles like to sleep all day" }
-  let(:ciphers) { keypairs.map {|k| sender.encrypt(plain, to: k.public_key).to_i(16) } }
+  let(:ciphers) { keypairs.map {|k| sender.encrypt(plain, to: k.public_key).to_number } }
 
   it "should break RSA given no padding and the same ciphertet encrypted multiple times" do
     pubkeys = keypairs.map(&:public_key)

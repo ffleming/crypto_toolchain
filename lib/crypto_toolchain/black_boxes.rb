@@ -12,6 +12,7 @@ require "crypto_toolchain/black_boxes/cbc_iv_equals_key_target"
 require "crypto_toolchain/black_boxes/sha1_mac"
 require "crypto_toolchain/black_boxes/md4_mac"
 require "crypto_toolchain/black_boxes/rsa_keypair"
+require "crypto_toolchain/black_boxes/rsa_unpadded_message_recovery_oracle"
 
 module CryptoToolchain
   module BlackBoxes

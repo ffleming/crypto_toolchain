@@ -1,5 +1,17 @@
 # encoding: ASCII-8BIT
 class Integer
+  def to_hex_string
+    ret = to_s(16)
+    if ret.length.odd?
+      ret = "0#{ret}"
+    end
+    ret
+  end
+
+  def to_bin_string
+    to_hex_string.from_hex
+  end
+
   def to_bits(pack_arg = "L>")
     [self].pack(pack_arg).to_bits
   end
@@ -32,10 +44,12 @@ class Integer
     t
   end
   alias_method :mod_inverse, :invmod
+  alias_method :modinv, :invmod
 
   # https://rosettacode.org/wiki/Nth_root#Ruby
   # (with modifications)
   def root(n)
+    raise "Can't be called on 0" if self == 0
     x = self
     loop do
       prev = x

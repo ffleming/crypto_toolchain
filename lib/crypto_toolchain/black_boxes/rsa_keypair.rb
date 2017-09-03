@@ -4,7 +4,7 @@ module CryptoToolchain
       PrivateKey = Struct.new(:d, :n)
       PublicKey = Struct.new(:e, :n)
 
-      def initialize(bits: 32)
+      def initialize(bits: 512)
         @p = OpenSSL::BN::generate_prime(bits).to_i
         @q = OpenSSL::BN::generate_prime(bits).to_i
         @n = @p * @q
@@ -13,22 +13,22 @@ module CryptoToolchain
         @d = @e.invmod(et)
       end
 
+      attr_reader :e
+
       def encrypt(m, to: )
         raise ArgumentError.new("Message should be a string") unless m.is_a?(String)
         m.
-          to_hex.
-          to_i(16).
+          to_number.
           modpow(to.e, to.n).
-          to_s(16)
+          to_bin_string
       end
 
       def decrypt(m)
         raise ArgumentError.new("Message should be a string") unless m.is_a?(String)
         m.
-          to_i(16).
+          to_number.
           modpow(private_key.d, private_key.n).
-          to_s(16).
-          from_hex
+          to_bin_string
       end
 
       def public_key
