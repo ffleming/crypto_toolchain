@@ -62,7 +62,7 @@ NB: These will probably never be finished
 * [x] Break SRP with a zero key
 * [x] Offline dictionary attack on simplified SRP
 * [x] Implement RSA
-* [ ] Implement an E=3 RSA Broadcast attack
+* [x] Implement an E=3 RSA Broadcast attack
 
 ### Set 6: RSA & DSA
 * [ ] Implement unpadded message recovery oracle
