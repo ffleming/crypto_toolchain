@@ -33,6 +33,19 @@ class Integer
   end
   alias_method :mod_inverse, :invmod
 
+  # https://rosettacode.org/wiki/Nth_root#Ruby
+  # (with modifications)
+  def root(n)
+    x = self
+    loop do
+      prev = x
+      x = ((n - 1) * prev) + (self / (prev ** (n - 1)))
+      x /= n
+      break if (prev - x).abs == 0
+    end
+    x
+  end
+
   def modexp(exponent, mod)
     raise ArgumentError.new("Exponent must be non-negative") if exponent < 0
     product = 1
