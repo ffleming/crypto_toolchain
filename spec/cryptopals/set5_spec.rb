@@ -255,7 +255,7 @@ RSpec.describe "Cryptopals Set 5" do
       server = CryptoToolchain::SRP::SimpleServer.new(socket: s2, u: 2, privkey: 1, salt: 1, malicious: true)
       start_threading(client, server)
       client.send_hello
-      sleep(0.25)
+      sleep(0.50)
 
       sockets.each {|s| s.puts("shutdown") }
 
@@ -264,6 +264,19 @@ RSpec.describe "Cryptopals Set 5" do
       end
 
       expect(server.recovered_password).to eq client.password
+    end
+  end
+
+  describe "RSA challenges" do
+    let(:bits) { 256 }
+    let(:k1) { CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits) }
+    let(:k2) { CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits) }
+    let(:plain) { "Poodles are cool" }
+
+    it "should implement RSA (39)" do
+      enc = k1.encrypt(plain, to: k2.public_key)
+      dec = (k2.decrypt(enc))
+      expect(dec).to eq plain
     end
   end
 end
