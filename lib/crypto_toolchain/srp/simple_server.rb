@@ -28,7 +28,6 @@ module CryptoToolchain
 
       def hello_received(email, _client_pubkey)
         @client_pubkey = _client_pubkey.to_i
-        u = rand((1..0xffff))
         write_message("hello", salt, pubkey, u)
         #  S = (A * v**u) ** b % N
         secret = (client_pubkey * v.modpow(u, n)).modpow(privkey, n)
