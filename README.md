@@ -61,7 +61,7 @@ NB: These will probably never be finished
 * [x] Implement Secure Remote Password (SRP)
 * [x] Break SRP with a zero key
 * [x] Offline dictionary attack on simplified SRP
-* [ ] Implement RSA
+* [x] Implement RSA
 * [ ] Implement an E=3 RSA Broadcast attack
 
 ### Set 6: RSA & DSA
