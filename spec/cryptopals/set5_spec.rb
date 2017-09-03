@@ -240,6 +240,7 @@ RSpec.describe "Cryptopals Set 5" do
 
     it "should authenticate using a simplified SRP protocol (38a)" do
       client = CryptoToolchain::SRP::SimpleClient.new(socket: s1)
+      server = CryptoToolchain::SRP::SimpleServer.new(socket: s2)
       start_threading(client, server)
       client.send_hello
       sleep(0.25)
