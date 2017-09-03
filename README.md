@@ -60,7 +60,7 @@ NB: These will probably never be finished
 * [x] Implement DH with negotiated groups, and break with malicious "g" parameters
 * [x] Implement Secure Remote Password (SRP)
 * [x] Break SRP with a zero key
-* [ ] Offline dictionary attack on simplified SRP
+* [x] Offline dictionary attack on simplified SRP
 * [ ] Implement RSA
 * [ ] Implement an E=3 RSA Broadcast attack
 
