@@ -1,3 +1,4 @@
+# encoding: ASCII-8BIT
 class Object
   # Transcribed from http://cryptopals.com/sets/5/challenges/40
   def chinese_remainder(residues, mods)

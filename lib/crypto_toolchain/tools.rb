@@ -14,6 +14,7 @@ require "crypto_toolchain/tools/sha1_length_extension_attack"
 require "crypto_toolchain/tools/md4_length_extension_attack"
 require "crypto_toolchain/tools/rsa_broadcast_attack"
 require "crypto_toolchain/tools/rsa_unpadded_message_recovery_attack"
+require "crypto_toolchain/tools/low_exponent_rsa_signature_forgery"
 
 module CryptoToolchain
   module Tools

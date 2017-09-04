@@ -48,16 +48,29 @@ class Integer
 
   # https://rosettacode.org/wiki/Nth_root#Ruby
   # (with modifications)
-  def root(n)
-    raise "Can't be called on 0" if self == 0
+  ROUNDING = %i(up down none)
+  def root(n, round: :down)
+    raise ArgumentError.new("round must be in [#{ROUNDING.join(', ')}]") unless ROUNDING.include?(round)
+    raise ArgumentError.new("Can't be called on 0") if self == 0
     x = self
     loop do
       prev = x
       x = ((n - 1) * prev) + (self / (prev ** (n - 1)))
       x /= n
-      break if (prev - x).abs == 0
+      break if (prev - x) <= 0
     end
-    x
+    if x**n == self
+      x
+    else
+      case round
+      when :up
+        x+1
+      when :down
+        x
+      when :none
+        raise ArgumentError.new("#{self} has no #{n}th root")
+      end
+    end
   end
 
   def modexp(exponent, mod)

@@ -14,5 +14,12 @@ RSpec.describe "Cryptopals Set 6" do
       recovered = atk.execute(ciphertext)
       expect(recovered).to eq plain
     end
+
+    it "should forge an RSA signature when e=3 (42)" do
+      plain = "hi mom"
+      keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 512)
+      forged = CryptoToolchain::Tools::LowExponentRSASignatureForgery.new(keypair: keypair, message: plain).execute
+      expect(keypair.verify(plain, signature: forged)).to be true
+    end
   end
 end
