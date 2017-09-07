@@ -67,7 +67,7 @@ NB: These will probably never be finished
 ### Set 6: RSA & DSA
 * [x] Implement unpadded message recovery oracle
 * [x] Bleichenbacher's e=3 RSA Attack
-* [ ] DSA key recovery from nonce
+* [x] DSA key recovery from nonce
 * [ ] DSA nonce recovery from repeated nonce
 * [ ] DSA parameter tampering
 * [ ] RSA parity oracle
