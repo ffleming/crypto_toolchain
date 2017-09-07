@@ -1,6 +1,6 @@
 module CryptoToolchain
   module Tools
-    class DSARecoverPrivateKey
+    class DSARecoverPrivateKeyFromNonce
       def initialize(public_key: , message: , r: , s: , p: DSA_P, q: DSA_Q, g: DSA_G)
         @public_key = numberize(public_key)
         @p = p

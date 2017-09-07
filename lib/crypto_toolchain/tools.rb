@@ -15,7 +15,7 @@ require "crypto_toolchain/tools/md4_length_extension_attack"
 require "crypto_toolchain/tools/rsa_broadcast_attack"
 require "crypto_toolchain/tools/rsa_unpadded_message_recovery_attack"
 require "crypto_toolchain/tools/low_exponent_rsa_signature_forgery"
-require "crypto_toolchain/tools/dsa_recover_private_key"
+require "crypto_toolchain/tools/dsa_recover_private_key_from_nonce"
 
 module CryptoToolchain
   module Tools

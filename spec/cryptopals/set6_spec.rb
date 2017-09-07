@@ -32,9 +32,9 @@ RSpec.describe "Cryptopals Set 6" do
                 1dec568280ce678e931868d23eb095fde9d3779191b8c0299d6e07b
                 bb283e6633451e535c45513b2d33c99ea17".gsub(/\s/, "").hex
 
-      atk = CryptoToolchain::Tools::DSARecoverPrivateKey.new(public_key: pubkey, message: plain,
-                                                             r: 548099063082341131477253921760299949438196259240,
-                                                             s: 857042759984254168557880549501802188789837994940)
+      atk = CryptoToolchain::Tools::DSARecoverPrivateKeyFromNonce.new(public_key: pubkey, message: plain,
+                                                                      r: 548099063082341131477253921760299949438196259240,
+                                                                      s: 857042759984254168557880549501802188789837994940)
       privkey = atk.execute(min: 16550, max: 16600)
       hsh = CryptoToolchain::Utilities::SHA1.hexdigest(privkey.to_hex)
       expected = "0954edd5e0afe5542a4adf012611a91912a3ec16"
