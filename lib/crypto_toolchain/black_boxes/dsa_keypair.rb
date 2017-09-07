@@ -10,10 +10,10 @@ module CryptoToolchain
 
       attr_reader :p, :q, :g
 
-      def sign(m, max_k: q)
+      def sign(m, k: nil)
         r = s = 0
+        k ||= rand(2...q)
         loop do
-          k = rand(2...max_k)
           r = g.modpow(k, p) % q
           next if r == 0
           digest = CryptoToolchain::Utilities::SHA1.digest(m).to_number

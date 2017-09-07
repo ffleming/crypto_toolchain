@@ -12,7 +12,13 @@ class Object
   end
 
   def numberize(n)
-    n.respond_to(:to_number) ? n.to_number : n
+    if n.respond_to?(:to_number)
+      n.to_number
+    elsif n.is_a?(Numeric)
+      n
+    else
+      raise ArgumentError, "#{n} cannot b numberized"
+    end
   end
 end
 
