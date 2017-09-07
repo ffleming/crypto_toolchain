@@ -10,5 +10,9 @@ class Object
     end
     sum % mods.inject(:*)
   end
+
+  def numberize(n)
+    n.respond_to(:to_number) ? n.to_number : n
+  end
 end
 
