@@ -13,16 +13,24 @@ module CryptoToolchain
 
       attr_reader :public_key, :message, :r, :s, :p, :q, :g
 
-      def execute(min: 1, max: 0xffffffff)
+      def valid_k?(k)
+        x = private_key_from(k: k)
+        kp = CryptoToolchain::BlackBoxes::DSAKeypair.new(p: p, q: q, g: g, private_key: x)
+        kp.public_key == public_key
+      end
+
+      def private_key_from(k: )
         #     (s * k) - H(msg)
         # x = ----------------  mod q
         #             r
+        numerator = ((s * k) - CryptoToolchain::Utilities::SHA1.digest(message).to_number) % q
+        denominator = r.invmod(q)
+        ((numerator * denominator) % q).to_bin_string
+      end
+
+      def execute(min: 1, max: 0xffffffff)
         (min..max).each do |k|
-          numerator = ((s * k) - CryptoToolchain::Utilities::SHA1.digest(message).to_number) % q
-          denominator = r.invmod(q)
-          x = (numerator * denominator) % q
-          kp = CryptoToolchain::BlackBoxes::DSAKeypair.new(p: p, q: q, g: g, private_key: x)
-          return x.to_bin_string if kp.public_key == public_key
+          return private_key_from(k: k) if valid_k?(k)
         end
         raise RuntimeError.new("Could not recover key")
       end

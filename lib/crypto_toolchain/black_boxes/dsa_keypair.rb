@@ -5,7 +5,7 @@ module CryptoToolchain
         @p = p
         @q = q
         @g = g
-        @private_key = private_key
+        @private_key = numberize(private_key) unless private_key.nil?
       end
 
       attr_reader :p, :q, :g

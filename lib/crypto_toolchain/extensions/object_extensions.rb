@@ -17,7 +17,7 @@ class Object
     elsif n.is_a?(Numeric)
       n
     else
-      raise ArgumentError, "#{n} cannot b numberized"
+      raise ArgumentError, "#{n} cannot be numberized"
     end
   end
 end

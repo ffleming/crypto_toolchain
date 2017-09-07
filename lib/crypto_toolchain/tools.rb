@@ -16,6 +16,7 @@ require "crypto_toolchain/tools/rsa_broadcast_attack"
 require "crypto_toolchain/tools/rsa_unpadded_message_recovery_attack"
 require "crypto_toolchain/tools/low_exponent_rsa_signature_forgery"
 require "crypto_toolchain/tools/dsa_recover_private_key_from_nonce"
+require "crypto_toolchain/tools/dsa_recover_nonce_from_signatures"
 
 module CryptoToolchain
   module Tools

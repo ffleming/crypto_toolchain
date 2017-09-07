@@ -68,7 +68,7 @@ NB: These will probably never be finished
 * [x] Implement unpadded message recovery oracle
 * [x] Bleichenbacher's e=3 RSA Attack
 * [x] DSA key recovery from nonce
-* [ ] DSA nonce recovery from repeated nonce
+* [x] DSA nonce recovery from repeated nonce
 * [ ] DSA parameter tampering
 * [ ] RSA parity oracle
 * [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Simple Case)
