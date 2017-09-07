@@ -21,7 +21,9 @@ RSpec.describe "Cryptopals Set 6" do
       forged = CryptoToolchain::Tools::LowExponentRSASignatureForgery.new(keypair: keypair, message: plain).execute
       expect(keypair.verify(plain, signature: forged)).to be true
     end
+  end
 
+  describe "DSA challenges" do
     it "should recover a DSA private key when k is generated between 0 and 0x0000ffff (43)" do
       plain = "For those that envy a MC it can be hazardous to your health\n" <<
               "So be friendly, a matter of life and death, just like a etch-a-sketch\n"
@@ -70,6 +72,23 @@ RSpec.describe "Cryptopals Set 6" do
 
       privkey = rec.private_key_from(k: k)
       expect(Digest::SHA1.hexdigest(privkey.to_hex)).to eq "ca8f6f7c66fa362d40760d135b763eb8527d3d52"
+    end
+
+    describe "Parameter tampering" do
+      let(:plain) { "I like dogs" }
+      it "should verify all DSA signatures when g is 0 (45a)" do
+        kp = CryptoToolchain::BlackBoxes::DSAKeypair.new(g: 0, dangerous: true)
+        r, s = kp.sign(plain)
+        expect(kp.verify(plain, r: r, s: s)).to be true
+        expect(kp.verify(plain.gsub("dogs", "ducks"), r: r, s: s)).to be true
+      end
+
+      it "should generate a 'magic signature' that will verify any string (45b)" do
+        kp = CryptoToolchain::BlackBoxes::DSAKeypair.new(g: CryptoToolchain::DSA_P + 1, dangerous: true)
+        r, s = kp.sign(plain)
+        expect(kp.verify("Hello world", r: r, s: s)).to be true
+        expect(kp.verify("Goodbye world", r: r, s: s)).to be true
+      end
     end
   end
 end

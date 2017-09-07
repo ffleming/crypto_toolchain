@@ -1,24 +1,25 @@
 module CryptoToolchain
   module BlackBoxes
     class DSAKeypair
-      def initialize(p: DSA_P, q: DSA_Q, g: DSA_G, private_key: nil)
+      def initialize(p: DSA_P, q: DSA_Q, g: DSA_G, private_key: nil, dangerous: false)
         @p = p
         @q = q
         @g = g
         @private_key = numberize(private_key) unless private_key.nil?
+        @safe = !dangerous
       end
 
-      attr_reader :p, :q, :g
+      attr_reader :p, :q, :g, :safe
 
       def sign(m, k: nil)
         r = s = 0
         k ||= rand(2...q)
         loop do
           r = g.modpow(k, p) % q
-          next if r == 0
+          next if safe && r == 0
           digest = CryptoToolchain::Utilities::SHA1.digest(m).to_number
           s = k.modinv(q) * ( digest + (private_key * r)) % q
-          next if s == 0
+          next if safe && s == 0
           return [r.to_bin_string, s.to_bin_string]
         end
       end
@@ -26,7 +27,9 @@ module CryptoToolchain
       def verify(m, r: , s: , public_key: self.public_key)
         s = s.to_number
         r = r.to_number
-        return false unless(0 < r && r < q) && (0 < s && s < q)
+        if safe && !(0 < r && r < q) && (0 < s && s < q)
+          return false
+        end
         w = s.invmod(q)
         u_1 = (CryptoToolchain::Utilities::SHA1.digest(m).to_number * w) % q
         u_2 = (r * w) % q
