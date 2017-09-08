@@ -69,7 +69,7 @@ NB: These will probably never be finished
 * [x] Bleichenbacher's e=3 RSA Attack
 * [x] DSA key recovery from nonce
 * [x] DSA nonce recovery from repeated nonce
-* [ ] DSA parameter tampering
+* [x] DSA parameter tampering
 * [ ] RSA parity oracle
 * [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Simple Case)
 * [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Complete Case)
