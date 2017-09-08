@@ -6,6 +6,7 @@ require "pp"
 require "uri"
 require 'json'
 require 'securerandom'
+require "bigdecimal"
 require "crypto_toolchain/version"
 require "crypto_toolchain/extensions"
 require "crypto_toolchain/utilities"
