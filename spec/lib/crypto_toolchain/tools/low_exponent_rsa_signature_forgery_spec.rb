@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe CryptoToolchain::Tools::LowExponentRSASignatureForgery do
   it "should work" do
     plain = "hi mom"
-    keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 512)
+    keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 1024)
     sig = keypair.sign(plain)
 
     forged = CryptoToolchain::Tools::LowExponentRSASignatureForgery.new(keypair: keypair, message: plain).execute

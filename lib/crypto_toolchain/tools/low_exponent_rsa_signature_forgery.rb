@@ -11,8 +11,7 @@ module CryptoToolchain
       def execute
         digest = CryptoToolchain::Utilities::SHA1.digest(message)
         asn = ASN1.fetch(:sha1)
-        # n can be at most 2*p bits
-        max = (keypair.bits / 4) - (asn.bytesize + digest.bytesize + 3)
+        max = (keypair.bits / 8) - (asn.bytesize + digest.bytesize + 3)
         (1..max).reverse_each do |padlen|
           forged = "\x01\xff\x00#{asn}#{digest}#{0.chr * padlen}".
             to_number.

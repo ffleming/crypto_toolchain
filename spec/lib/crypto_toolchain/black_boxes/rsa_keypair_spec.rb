@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe CryptoToolchain::BlackBoxes::RSAKeypair do
-  let(:bits) { 512 }
+  let(:bits) { 1024 }
   let(:k1) { described_class.new(bits: bits) }
   let(:k2) { described_class.new(bits: bits) }
   let(:plains) do

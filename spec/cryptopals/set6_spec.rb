@@ -17,7 +17,7 @@ RSpec.describe "Cryptopals Set 6" do
 
     it "should forge an RSA signature when e=3 (42)" do
       plain = "hi mom"
-      keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 512)
+      keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 1024)
       forged = CryptoToolchain::Tools::LowExponentRSASignatureForgery.new(keypair: keypair, message: plain).execute
       expect(keypair.verify(plain, signature: forged)).to be true
     end
@@ -93,10 +93,10 @@ RSpec.describe "Cryptopals Set 6" do
   end
 
   it "should decrypt an RSA ciphertext with a parity oracle" do
-    # To complete Cryptopals #46, use the following and increase the size of the RSA keypair to at least 512
+    # To complete Cryptopals #46, use the following and increase the size of the RSA keypair to at least 1024
     # "VGhhdCdzIHdoeSBJIGZvdW5kIHlvdSBkb24ndCBwbGF5IGFyb3VuZCB3aXRoIHRoZSBGdW5reSBDb2xkIE1lZGluYQ=="
     plain = "SSBsaWtlIHBvb2RsZXM=".from_base64
-    kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 128)
+    kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 256)
     ciphertext = kp.encrypt(plain, to: kp.public_key)
     oracle = CryptoToolchain::BlackBoxes::RSAParityOracle.new(kp)
     atk = CryptoToolchain::Tools::RSAParityOracleAttack.new(oracle: oracle, n: kp.public_key.n)

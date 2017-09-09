@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe CryptoToolchain::Tools::RSABroadcastAttack do
-  let(:bits) { 512 }
+  let(:bits) { 1024 }
   let(:sender) { CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits) }
   let(:keypairs) do
     [

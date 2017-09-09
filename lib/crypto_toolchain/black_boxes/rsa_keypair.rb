@@ -5,10 +5,10 @@ module CryptoToolchain
       PrivateKey = Struct.new(:d, :n)
       PublicKey = Struct.new(:e, :n)
 
-      def initialize(bits: 512)
+      def initialize(bits: 1024)
         @bits = bits
-        @p = OpenSSL::BN::generate_prime(bits).to_i
-        @q = OpenSSL::BN::generate_prime(bits).to_i
+        @p = OpenSSL::BN::generate_prime(bits/2).to_i
+        @q = OpenSSL::BN::generate_prime(bits/2).to_i
         @n = @p * @q
         et = (@p-1) * (@q-1)
         @e = 3

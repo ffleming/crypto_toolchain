@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe CryptoToolchain::Tools::RSAUnpaddedMessageRecoveryAttack do
-  let(:bits) { 512 }
+  let(:bits) { 1024 }
   let(:keypair) { CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: bits) }
   let(:oracle) { CryptoToolchain::BlackBoxes::RSAUnpaddedMessageRecoveryOracle.new(keypair: keypair) }
   let(:atk) { described_class.new(oracle: oracle) }
