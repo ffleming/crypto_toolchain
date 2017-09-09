@@ -70,7 +70,7 @@ NB: These will probably never be finished
 * [x] DSA key recovery from nonce
 * [x] DSA nonce recovery from repeated nonce
 * [x] DSA parameter tampering
-* [ ] RSA parity oracle
+* [x] RSA parity oracle
 * [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Simple Case)
 * [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Complete Case)
 
