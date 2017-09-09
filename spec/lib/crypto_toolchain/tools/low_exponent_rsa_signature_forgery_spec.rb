@@ -1,7 +1,7 @@
 # encoding: ASCII-8BIT
 require "spec_helper"
 RSpec.describe CryptoToolchain::Tools::LowExponentRSASignatureForgery do
-  it "should work" do
+  it "should forge an RSA signature when a low exponent is used" do
     plain = "hi mom"
     keypair = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 1024)
     sig = keypair.sign(plain)
