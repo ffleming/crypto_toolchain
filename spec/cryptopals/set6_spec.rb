@@ -100,6 +100,6 @@ RSpec.describe "Cryptopals Set 6" do
     ciphertext = kp.encrypt(plain, to: kp.public_key)
     oracle = CryptoToolchain::BlackBoxes::RSAParityOracle.new(kp)
     atk = CryptoToolchain::Tools::RSAParityOracleAttack.new(oracle: oracle, n: kp.public_key.n)
-    expect(atk.execute(ciphertext, output: true)).to eq plain
+    expect(atk.execute(ciphertext)).to eq plain
   end
 end
