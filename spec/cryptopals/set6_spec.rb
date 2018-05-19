@@ -92,14 +92,16 @@ RSpec.describe "Cryptopals Set 6" do
     end
   end
 
-  it "should decrypt an RSA ciphertext with a parity oracle" do
-    # To complete Cryptopals #46, use the following and increase the size of the RSA keypair to at least 1024
-    # "VGhhdCdzIHdoeSBJIGZvdW5kIHlvdSBkb24ndCBwbGF5IGFyb3VuZCB3aXRoIHRoZSBGdW5reSBDb2xkIE1lZGluYQ=="
-    plain = "SSBsaWtlIHBvb2RsZXM=".from_base64
-    kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 256)
-    ciphertext = kp.encrypt(plain, to: kp.public_key)
-    oracle = CryptoToolchain::BlackBoxes::RSAParityOracle.new(kp)
-    atk = CryptoToolchain::Tools::RSAParityOracleAttack.new(oracle: oracle, n: kp.public_key.n)
-    expect(atk.execute(ciphertext)).to eq plain
+  describe "RSA parity oracle (46)" do
+    it "should decrypt an RSA ciphertext with a parity oracle" do
+      # To complete Cryptopals #46, use the following and increase the size of the RSA keypair to at least 1024
+      # "VGhhdCdzIHdoeSBJIGZvdW5kIHlvdSBkb24ndCBwbGF5IGFyb3VuZCB3aXRoIHRoZSBGdW5reSBDb2xkIE1lZGluYQ=="
+      plain = "SSBsaWtlIHBvb2RsZXM=".from_base64
+      kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 256)
+      ciphertext = kp.encrypt(plain, to: kp.public_key)
+      oracle = CryptoToolchain::BlackBoxes::RSAParityOracle.new(kp)
+      atk = CryptoToolchain::Tools::RSAParityOracleAttack.new(oracle: oracle, n: kp.public_key.n)
+      expect(atk.execute(ciphertext)).to eq plain
+    end
   end
 end
