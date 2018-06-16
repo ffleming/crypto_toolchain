@@ -87,4 +87,13 @@ class Integer
     product
   end
   alias_method :modpow, :modexp
+
+  def updiv(other)
+    quot, remainder = self.divmod(other)
+    if remainder == 0
+      quot
+    else
+      quot + 1
+    end
+  end
 end

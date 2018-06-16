@@ -15,6 +15,7 @@ require "crypto_toolchain/black_boxes/rsa_keypair"
 require "crypto_toolchain/black_boxes/rsa_unpadded_message_recovery_oracle"
 require "crypto_toolchain/black_boxes/rsa_parity_oracle"
 require "crypto_toolchain/black_boxes/dsa_keypair"
+require "crypto_toolchain/black_boxes/rsa_padding_oracle"
 
 module CryptoToolchain
   module BlackBoxes

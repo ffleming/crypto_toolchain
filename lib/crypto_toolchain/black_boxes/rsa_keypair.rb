@@ -5,17 +5,17 @@ module CryptoToolchain
       PrivateKey = Struct.new(:d, :n)
       PublicKey = Struct.new(:e, :n)
 
-      def initialize(bits: 1024)
+      def initialize(bits: 1024, p: nil, q: nil)
         @bits = bits
-        @p = OpenSSL::BN::generate_prime(bits/2).to_i
-        @q = OpenSSL::BN::generate_prime(bits/2).to_i
+        @p = p || OpenSSL::BN::generate_prime(bits/2).to_i
+        @q = q || OpenSSL::BN::generate_prime(bits/2).to_i
         @n = @p * @q
         et = (@p-1) * (@q-1)
         @e = 3
         @d = @e.invmod(et)
       end
 
-      attr_reader :e, :bits
+      attr_reader :e, :bits, :p, :q
 
       def encrypt(m, to: )
         raise ArgumentError.new("Message should be a string") unless m.is_a?(String)
@@ -25,12 +25,17 @@ module CryptoToolchain
           to_bin_string
       end
 
-      def decrypt(m)
+      def decrypt(m, pad: false)
         raise ArgumentError.new("Message should be a string") unless m.is_a?(String)
-        m.
-          to_number.
-          modpow(private_key.d, private_key.n).
-          to_bin_string
+        decrypted = m.
+                      to_number.
+                      modpow(private_key.d, private_key.n).
+                      to_bin_string
+        if pad
+          pad_to_key_size(decrypted)
+        else
+          decrypted
+        end
       end
 
       def sign(plaintext)
@@ -77,6 +82,14 @@ module CryptoToolchain
           sha384: "0A0\r\x06\t`\x86H\x01e\x03\x04\x02\x02\x05\x00\x040",
           sha512: "0Q0\r\x06\t`\x86H\x01e\x03\x04\x02\x03\x05\x00\x04@"
         }.fetch(hash_type)
+      end
+
+      def pad_to_key_size(str)
+        padded = str.dup
+        while padded.bytesize < bits / 8
+          padded = "\x00#{padded}"
+        end
+        padded
       end
     end
   end

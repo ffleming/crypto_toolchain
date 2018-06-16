@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ffleming/crypto_toolchain.svg?branch=master)](https://travis-ci.org/ffleming/crypto_toolchain)
+
 # CryptoToolchain
 
 This is a suite of tools for ruining the blue team's day with respect to crypto.
@@ -7,6 +9,8 @@ by the hand down the garden path to breaking a good number of common
 cryptographic vulnerabilities.
 
 NB: These will probably never be finished
+
+Add `--tag ~slow` to your `.rspec` file if you don't want to run slow tests.
 
 ## Cryptopals progress
 
@@ -71,8 +75,8 @@ NB: These will probably never be finished
 * [x] DSA nonce recovery from repeated nonce
 * [x] DSA parameter tampering
 * [x] RSA parity oracle
-* [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Simple Case)
-* [ ] Bleichenbacher's PKCS 1.5 Padding Oracle (Complete Case)
+* [x] Bleichenbacher's PKCS 1.5 Padding Oracle (Simple Case)
+* [x] Bleichenbacher's PKCS 1.5 Padding Oracle (Complete Case)
 
 ### Set 7: Hashes
 * [ ] CBC-MAC Message Forgery

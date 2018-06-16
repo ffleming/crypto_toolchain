@@ -7,6 +7,7 @@ require "uri"
 require 'json'
 require 'securerandom'
 require "bigdecimal"
+require 'openssl'
 require "crypto_toolchain/version"
 require "crypto_toolchain/extensions"
 require "crypto_toolchain/utilities"

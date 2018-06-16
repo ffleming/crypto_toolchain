@@ -92,8 +92,8 @@ RSpec.describe "Cryptopals Set 6" do
     end
   end
 
-  describe "RSA parity oracle (46)" do
-    it "should decrypt an RSA ciphertext with a parity oracle" do
+  describe "RSA oracle attacks" do
+    it "should decrypt an RSA ciphertext with a parity oracle (46)" do
       # To complete Cryptopals #46, use the following and increase the size of the RSA keypair to at least 1024
       # "VGhhdCdzIHdoeSBJIGZvdW5kIHlvdSBkb24ndCBwbGF5IGFyb3VuZCB3aXRoIHRoZSBGdW5reSBDb2xkIE1lZGluYQ=="
       plain = "SSBsaWtlIHBvb2RsZXM=".from_base64
@@ -102,6 +102,39 @@ RSpec.describe "Cryptopals Set 6" do
       oracle = CryptoToolchain::BlackBoxes::RSAParityOracle.new(kp)
       atk = CryptoToolchain::Tools::RSAParityOracleAttack.new(oracle: oracle, n: kp.public_key.n)
       expect(atk.execute(ciphertext)).to eq plain
+    end
+
+    # Used RSA values and a constant string that tend to produce quick recovery
+    context "RSA PKCS#1 1.5 padding oracle" do
+      it "should recover the message (simple case) (47)" do
+        kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 256,
+                                                         p: 0xe5f109e2035b672986554a523fdc8883,
+                                                         q: 0xe9d2f62dada945e3fea4d1a58ff9b06f)
+        plain = "\x00\x02\xFBb\xF7\xB4\x01(\xCF\b,\x95T4\x8Cxm\xBD\xF6*\x00kick it, CC"
+        ciphertext = kp.encrypt(plain, to: kp.public_key)
+        oracle = CryptoToolchain::BlackBoxes::RSAPaddingOracle.new(keypair: kp)
+        atk = CryptoToolchain::Tools::RSAPaddingOracleAttack.new(
+          oracle: oracle,
+          n: kp.public_key.n,
+          e: kp.public_key.e
+        )
+        expect(atk.execute(ciphertext)).to eq plain
+      end
+
+      it "should recover the message (complete case) (48)" do
+        p = 0xb08b4c664074144493282a7e7afd6f93a4075fee94783640b1823d5a90940ad4fee936bc5db7df54bb7ea659b7356b87
+        q = 0xa9ed40e7d07e20178c69455dec5a27848d6ce5bc98f92853d4d31c53e766dcf2e8d09c07048924490ef673d0469cbd9d
+        kp = CryptoToolchain::BlackBoxes::RSAKeypair.new(bits: 768, p: p, q: q)
+        plain = "\x00\x02#{'a' * 82}\x00kick it, CC"
+        ciphertext = kp.encrypt(plain, to: kp.public_key)
+        oracle = CryptoToolchain::BlackBoxes::RSAPaddingOracle.new(keypair: kp)
+        atk = CryptoToolchain::Tools::RSAPaddingOracleAttack.new(
+          oracle: oracle,
+          n: kp.public_key.n,
+          e: kp.public_key.e
+        )
+        expect(atk.execute(ciphertext)).to eq plain
+      end
     end
   end
 end

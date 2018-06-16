@@ -123,10 +123,21 @@ class String
     end
   end
 
+  def pad_pkcs1_5(bits)
+    len = bits / 8
+    if self.bytesize > len - 11
+      raise ArgumentError.new("String #{self.inspect} is too long to pad with PKCS#1v1.5, length: #{self.bytesize}")
+    end
+    padstring = (len - 3 - self.bytesize).times.with_object("") { |_, memo| memo << rand(1..255).chr }
+    "\x00\x02#{padstring}\x00#{self}"
+  end
+
+  def is_pkcs1_5_padded?(bits)
+    self[0..1] == "\x00\x02"
+  end
+
   def is_pkcs7_padded?(blocksize = CryptoToolchain::AES_BLOCK_SIZE)
-    # if self.size != blocksize
-      return in_blocks(blocksize).last.is_block_pkcs7_padded?(blocksize)
-    # end
+    return in_blocks(blocksize).last.is_block_pkcs7_padded?(blocksize)
   end
 
   def without_pkcs7_padding(blocksize = CryptoToolchain::AES_BLOCK_SIZE, raise_error: false)

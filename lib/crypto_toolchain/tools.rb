@@ -18,6 +18,7 @@ require "crypto_toolchain/tools/low_exponent_rsa_signature_forgery"
 require "crypto_toolchain/tools/dsa_recover_private_key_from_nonce"
 require "crypto_toolchain/tools/dsa_recover_nonce_from_signatures"
 require "crypto_toolchain/tools/rsa_parity_oracle_attack"
+require "crypto_toolchain/tools/rsa_padding_oracle_attack"
 
 module CryptoToolchain
   module Tools
