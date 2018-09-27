@@ -1,6 +1,6 @@
-require "crypto_toolchain/extensions/string_extensions"
-require "crypto_toolchain/extensions/integer_extensions"
-require "crypto_toolchain/extensions/object_extensions"
+require "crypto_toolchain/extensions/string"
+require "crypto_toolchain/extensions/integer"
+require "crypto_toolchain/extensions/object"
 
 module CryptoToolchain
   module Extensions
